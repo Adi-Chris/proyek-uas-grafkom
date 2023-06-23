@@ -5,7 +5,6 @@ import org.joml.Vector2f;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class MouseInput {
-
     private Vector2f currentPos;
     private Vector2f displVec;
     private Vector2f scroll;

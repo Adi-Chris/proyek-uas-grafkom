@@ -3,7 +3,6 @@ package Engine;
 import org.joml.*;
 
 public class Camera {
-
     private Vector3f direction;
     private Vector3f position;
     private Vector3f right;

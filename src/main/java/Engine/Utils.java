@@ -56,7 +56,6 @@ public class Utils {
         return arraylist;
     }
 
-
     public static List<String> readAllLines (String fileName){
         List<String> list = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new InputStreamReader(Class.forName(Utils.class.getName()).getResourceAsStream(fileName)))){
@@ -69,5 +68,4 @@ public class Utils {
         }
         return list;
     }
-
 }
