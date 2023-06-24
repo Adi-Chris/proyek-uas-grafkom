@@ -1,4 +1,5 @@
 package Engine;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 import java.io.BufferedReader;
@@ -31,6 +32,16 @@ public class Utils {
         return arr;
     }
 
+    public static float[] listoFloat2(List<Vector2f> arraylist) {
+        float[] arr = new float[arraylist.size() * 2];
+        int index = 0;
+        for (int i = 0; i < arraylist.size(); i++) {
+            arr[index++] = arraylist.get(i).x;
+            arr[index++] = arraylist.get(i).y;
+        }
+        return arr;
+    }
+
     public static int[] listoInt(List<Integer> arraylist){
         int[] arr = new int[arraylist.size()];
         for(int i = 0;i<arraylist.size();i++){
@@ -52,6 +63,15 @@ public class Utils {
         int index = 0;
         for(int i = 0;i<arr.length;i+=3){
             arraylist.add(new Vector3f(arr[i], arr[i+1], arr[i+2]));
+        }
+        return arraylist;
+    }
+
+    public static List<Vector2f> floatToList2(float[] arr) {
+        List<Vector2f> arraylist = new ArrayList<>();
+        int index = 0;
+        for (int i = 0; i < arr.length; i += 2) {
+            arraylist.add(new Vector2f(arr[i], arr[i + 1]));
         }
         return arraylist;
     }

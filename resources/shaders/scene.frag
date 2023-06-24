@@ -42,7 +42,7 @@ struct SpotLight {
 
 uniform SpotLight spotLight;
 
-uniform vec4 uni_color;
+//uniform vec4 uni_color;
 out vec4 frag_color;
 
 //uniform vec3 lightColor;
@@ -51,6 +51,8 @@ uniform vec3 viewPos;
 
 in vec3 Normal;
 in vec3 FragPos;
+in vec2 fragTextureCoordinate;
+uniform sampler2D textureSampler;
 
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir) {
     vec3 lightDir = normalize(- light.direction);
@@ -132,5 +134,6 @@ void main() {
 
     // Spot Light
     result += CalcSpotLight(spotLight, normal, FragPos, viewDir);
-    frag_color = vec4(result * vec3(uni_color), 1.0);
+//    frag_color = vec4(result * vec3(uni_color), 1.0);
+    frag_color = vec4(result,1.0) * texture(textureSampler, fragTextureCoordinate);
 }
