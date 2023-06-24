@@ -14,7 +14,7 @@ import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL30.*;
 
 public class Main {
-    private Window window = new Window(1000,1000, "Hello World");
+    private Window window = new Window(1000,1000, "Window");
     ArrayList<Object> objects = new ArrayList<>();
     Camera camera = new Camera();
     Projection projection = new Projection(window.getWidth(),window.getHeight());
@@ -41,13 +41,60 @@ public class Main {
                 0.0f,
                 0.125f,
                 0.125f,
-                0.125f
+                0.125f,
+                1
         ));
-//        objects.get(0).translateObject(0.5f,0.0f,0.0f);
-        objects.get(0).scaleObject(0.02f,0.02f,0.02f);
+        objects.get(0).scaleObject(0.1f,0.1f,0.1f);
+
+        objects.add(new Sphere(
+                Arrays.asList(
+                        new ShaderProgram.ShaderModuleData(
+                                "resources/shaders/scene.vert"
+                                , GL_VERTEX_SHADER),
+                        new ShaderProgram.ShaderModuleData(
+                                "resources/shaders/scene.frag"
+                                , GL_FRAGMENT_SHADER)
+                ),
+                new ArrayList<>(),
+                new Vector4f(0.0f,1.0f,1.0f,1.0f),
+                0.0f,
+                0.0f,
+                0.0f,
+                0.125f,
+                0.125f,
+                0.125f,
+                2
+        ));
+        objects.get(1).scaleObject(0.0005f,0.0005f,0.0005f);
+        objects.get(1).rotateObject((float)(Math.toRadians(90f)),0f,1f, 0f);
+        objects.get(1).translateObject(0.0f, 0.0f, -0.001f);
+
+        objects.add(new Sphere(
+                Arrays.asList(
+                        new ShaderProgram.ShaderModuleData(
+                                "resources/shaders/scene.vert"
+                                , GL_VERTEX_SHADER),
+                        new ShaderProgram.ShaderModuleData(
+                                "resources/shaders/scene.frag"
+                                , GL_FRAGMENT_SHADER)
+                ),
+                new ArrayList<>(),
+                new Vector4f(0.0f,1.0f,1.0f,1.0f),
+                0.0f,
+                0.0f,
+                0.0f,
+                0.125f,
+                0.125f,
+                0.125f,
+                3
+        ));
+        objects.get(2).scaleObject(0.0005f,0.0005f,0.0005f);
+        objects.get(2).rotateObject((float)(Math.toRadians(90f)),0f,1f, 0f);
+        objects.get(2).translateObject(0.015f, 0.0f, -0.001f);
     }
     public void input(){
-        float move = 0.0005f;
+//        float move = 0.00075f;
+        float move = 0.002f;
 //        float move = 0.01f;
         if (window.isKeyPressed(GLFW_KEY_W)) {
             camera.moveDown(move);

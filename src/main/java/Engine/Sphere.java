@@ -28,17 +28,15 @@ public class Sphere extends Object {
     float radiusX;
     float radiusY;
     float radiusZ;
-
     List<Integer> index;
     int ibo;
-
     List<Vector3f> normal;
     int nbo;
     int tex_tbo;
     int tbo;
     List<Vector2f> textureCoordinates;
 
-    public Sphere(List<ShaderModuleData> shaderModuleDataList, List<Vector3f> vertices, Vector4f color, float centerX, float centerY, float centerZ, float radiusX, float radiusY, float radiusZ) {
+    public Sphere(List<ShaderModuleData> shaderModuleDataList, List<Vector3f> vertices, Vector4f color, float centerX, float centerY, float centerZ, float radiusX, float radiusY, float radiusZ, int pilihan) {
         super(shaderModuleDataList, vertices, color);
         this.centerX = centerX;
         this.centerY = centerY;
@@ -47,13 +45,33 @@ public class Sphere extends Object {
         this.radiusY = radiusY;
         this.radiusZ = radiusZ;
 //        createBox();
-        loadObjModel("/models/sirkuitbaru2.obj");
-        setIbo();
-        setupVAOVBO();
-        try {
-            loadTexture("C:/Users/ASUS ROG/Projects/grafkom/proyek-uas-grafkom/src/main/resources/textures/texture.png");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        if (pilihan == 1) {
+            loadObjModel("/models/sirkuitbaru2.obj");
+            setIbo();
+            setupVAOVBO();
+            try {
+                loadTexture("C:/Users/ASUS ROG/Projects/grafkom/proyek-uas-grafkom/src/main/resources/textures/texture.png");
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        } else if (pilihan == 2) {
+            loadObjModel("/models/supra2.obj");
+            setIbo();
+            setupVAOVBO();
+            try {
+                loadTexture("C:/Users/ASUS ROG/Projects/grafkom/proyek-uas-grafkom/src/main/resources/textures/texture2.png");
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        } else if (pilihan == 3) {
+            loadObjModel("/models/supra3.obj");
+            setIbo();
+            setupVAOVBO();
+            try {
+                loadTexture("C:/Users/ASUS ROG/Projects/grafkom/proyek-uas-grafkom/src/main/resources/textures/texture3.png");
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -281,7 +299,6 @@ public class Sphere extends Object {
         uniformsMap.setUniform("spotLight.cutOff", (float) Math.cos(Math.toRadians(12.5f)));
         uniformsMap.setUniform("spotLight.outerCutOff", (float) Math.cos(Math.toRadians(12.5f)));
         uniformsMap.setUniform("viewPos", camera.getPosition());
-
         uniformsMap.setUniform("textureSampler", 0);
 
         // bind texture
@@ -392,7 +409,7 @@ public class Sphere extends Object {
         faces.add(facesVec);
     }
 
-    public void loadTexture(String filename) throws Exception{
+    public void loadTexture(String filename) throws Exception {
         int width, height;
         ByteBuffer buffer;
 
@@ -414,10 +431,9 @@ public class Sphere extends Object {
         //bind texture
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, texID);
         GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
-        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0 ,GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
         GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
         STBImage.stbi_image_free(buffer);
         tex_tbo = texID;
-        System.out.println("tex_tbo:" + tex_tbo);
     }
 }
