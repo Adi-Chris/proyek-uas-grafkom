@@ -30,8 +30,6 @@ public class Main {
 //        camera.setPosition(0.0f,  0.0f, 0.5f);
         camera.setPosition(0.0f, 0.1f, 0.006f);
         camera.setRotation((float) Math.toRadians(90.0f), (float) Math.toRadians(0.0f));
-        camera.setPosition(0.0f, 0.1f, 0.006f);
-        camera.setRotation((float) Math.toRadians(90.0f), (float) Math.toRadians(0.0f));
         skyboxRenderer = new SkyboxRenderer(
                 Arrays.asList(
                         new ShaderProgram.ShaderModuleData(
@@ -120,8 +118,8 @@ public class Main {
 
     public void input() {
 //        float move = 0.00075f;
-        float move = 0.002f;
 //        float move = 0.01f;
+        float move = 0.002f;
         float moveThirdPerson = 0.001f;
 
         if (window.isKeyPressed(GLFW_KEY_1)) {
@@ -138,42 +136,6 @@ public class Main {
             firstPersonCamera.addRotation((float) Math.toRadians(0.0f), (float) Math.toRadians(90.0f));
         }
 
-        if (pilihanKamera == 1) {
-            if (window.isKeyPressed(GLFW_KEY_W)) {
-                camera.moveDown(move);
-                System.out.println(camera.getPosition());
-            }
-            if (window.isKeyPressed(GLFW_KEY_A)) {
-                camera.moveRight(move);
-                System.out.println(camera.getPosition());
-            }
-            if (window.isKeyPressed(GLFW_KEY_S)) {
-                camera.moveUp(move);
-                System.out.println(camera.getPosition());
-            }
-            if (window.isKeyPressed(GLFW_KEY_D)) {
-                camera.moveLeft(move);
-                System.out.println(camera.getPosition());
-            }
-            if (window.isKeyPressed(GLFW_KEY_T)) {
-                camera.moveForward(move);
-                System.out.println(camera.getPosition());
-            }
-            if (window.isKeyPressed(GLFW_KEY_G)) {
-                camera.moveBackwards(move);
-                System.out.println(camera.getPosition());
-            }
-            if (window.getMouseInput().isLeftButtonPressed()) {
-                Vector2f displayVector = window.getMouseInput().getDisplVec();
-                camera.addRotation((float) Math.toRadians(displayVector.x * 0.1f), (float) Math.toRadians(displayVector.y * 0.1f));
-                System.out.println(camera.getPosition());
-            }
-            if (window.getMouseInput().getScroll().y != 0) {
-                projection.setFOV(projection.getFOV() - (window.getMouseInput().getScroll().y * 0.01f));
-                window.getMouseInput().setScroll(new Vector2f());
-                System.out.println(camera.getPosition());
-            }
-        }
         if (pilihanKamera == 1) {
             if (window.isKeyPressed(GLFW_KEY_W)) {
                 objects.get(1).translateObject(0.0f, 0.0f, -moveThirdPerson / 2);
@@ -225,42 +187,6 @@ public class Main {
 
         if (pilihanKamera == 2) {
             if (window.isKeyPressed(GLFW_KEY_W)) {
-                thirdPersonCamera.moveDown(move);
-                System.out.println(thirdPersonCamera.getPosition());
-            }
-            if (window.isKeyPressed(GLFW_KEY_A)) {
-                thirdPersonCamera.moveRight(move);
-                System.out.println(thirdPersonCamera.getPosition());
-            }
-            if (window.isKeyPressed(GLFW_KEY_S)) {
-                thirdPersonCamera.moveUp(move);
-                System.out.println(thirdPersonCamera.getPosition());
-            }
-            if (window.isKeyPressed(GLFW_KEY_D)) {
-                thirdPersonCamera.moveLeft(move);
-                System.out.println(thirdPersonCamera.getPosition());
-            }
-            if (window.isKeyPressed(GLFW_KEY_T)) {
-                thirdPersonCamera.moveForward(move);
-                System.out.println(thirdPersonCamera.getPosition());
-            }
-            if (window.isKeyPressed(GLFW_KEY_G)) {
-                thirdPersonCamera.moveBackwards(move);
-                System.out.println(thirdPersonCamera.getPosition());
-            }
-            if (window.getMouseInput().isLeftButtonPressed()) {
-                Vector2f displayVector = window.getMouseInput().getDisplVec();
-                thirdPersonCamera.addRotation((float) Math.toRadians(displayVector.x * 0.1f), (float) Math.toRadians(displayVector.y * 0.1f));
-                System.out.println(thirdPersonCamera.getPosition());
-            }
-            if (window.getMouseInput().getScroll().y != 0) {
-                projection.setFOV(projection.getFOV() - (window.getMouseInput().getScroll().y * 0.01f));
-                window.getMouseInput().setScroll(new Vector2f());
-                System.out.println(thirdPersonCamera.getPosition());
-            }
-        }
-        if (pilihanKamera == 2) {
-            if (window.isKeyPressed(GLFW_KEY_W)) {
                 objects.get(1).translateObject(moveThirdPerson, 0.0f, 0.0f);
                 objects.get(2).translateObject(moveThirdPerson, 0.0f, 0.0f);
                 thirdPersonCamera.moveForward(moveThirdPerson);
@@ -283,7 +209,6 @@ public class Main {
                 objects.get(2).translateObject(0.0f, 0.0f, moveThirdPerson);
                 thirdPersonCamera.moveRight(moveThirdPerson);
             }
-
             if (window.getMouseInput().isLeftButtonPressed()) {
                 Vector2f displayVector = window.getMouseInput().getDisplVec();
                 thirdPersonCamera.addRotation((float) Math.toRadians(displayVector.x * 0.1f), (float) Math.toRadians(displayVector.y * 0.1f));
