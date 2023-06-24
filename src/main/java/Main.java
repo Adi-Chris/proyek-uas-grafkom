@@ -17,15 +17,33 @@ public class Main {
     private Window window = new Window(1000, 1000, "Window");
     ArrayList<Object> objects = new ArrayList<>();
     Camera camera = new Camera();
+    Projection projection = new Projection(window.getWidth(), window.getHeight());
+    private SkyboxRenderer skyboxRenderer;
     Camera thirdPersonCamera = new Camera();
     Camera firstPersonCamera = new Camera();
-    Projection projection = new Projection(window.getWidth(), window.getHeight());
     int pilihanKamera = 1;
 
     public void init() {
+
         window.init();
         GL.createCapabilities();
 //        camera.setPosition(0.0f,  0.0f, 0.5f);
+        camera.setPosition(0.0f, 0.1f, 0.006f);
+        camera.setRotation((float) Math.toRadians(90.0f), (float) Math.toRadians(0.0f));
+        camera.setPosition(0.0f, 0.1f, 0.006f);
+        camera.setRotation((float) Math.toRadians(90.0f), (float) Math.toRadians(0.0f));
+        skyboxRenderer = new SkyboxRenderer(
+                Arrays.asList(
+                        new ShaderProgram.ShaderModuleData(
+                                "resources/shaders/skyboxVertexShader.vert"
+                                , GL_VERTEX_SHADER),
+                        new ShaderProgram.ShaderModuleData(
+                                "resources/shaders/skyboxFragmentShader.frag"
+                                , GL_FRAGMENT_SHADER)
+                ),
+                new ArrayList<>(),
+                new Vector4f()
+        );
         camera.setPosition(0.04f, 0.45f, 0.055f);
         camera.setRotation((float) Math.toRadians(90.0f), (float) Math.toRadians(0.0f));
 
@@ -102,8 +120,8 @@ public class Main {
 
     public void input() {
 //        float move = 0.00075f;
-//        float move = 0.01f;
         float move = 0.002f;
+//        float move = 0.01f;
         float moveThirdPerson = 0.001f;
 
         if (window.isKeyPressed(GLFW_KEY_1)) {
@@ -122,16 +140,52 @@ public class Main {
 
         if (pilihanKamera == 1) {
             if (window.isKeyPressed(GLFW_KEY_W)) {
-                objects.get(1).translateObject(0.0f, 0.0f, -moveThirdPerson/2);
-                objects.get(2).translateObject(0.0f, 0.0f, -moveThirdPerson/2);
+                camera.moveDown(move);
+                System.out.println(camera.getPosition());
+            }
+            if (window.isKeyPressed(GLFW_KEY_A)) {
+                camera.moveRight(move);
+                System.out.println(camera.getPosition());
+            }
+            if (window.isKeyPressed(GLFW_KEY_S)) {
+                camera.moveUp(move);
+                System.out.println(camera.getPosition());
+            }
+            if (window.isKeyPressed(GLFW_KEY_D)) {
+                camera.moveLeft(move);
+                System.out.println(camera.getPosition());
+            }
+            if (window.isKeyPressed(GLFW_KEY_T)) {
+                camera.moveForward(move);
+                System.out.println(camera.getPosition());
+            }
+            if (window.isKeyPressed(GLFW_KEY_G)) {
+                camera.moveBackwards(move);
+                System.out.println(camera.getPosition());
+            }
+            if (window.getMouseInput().isLeftButtonPressed()) {
+                Vector2f displayVector = window.getMouseInput().getDisplVec();
+                camera.addRotation((float) Math.toRadians(displayVector.x * 0.1f), (float) Math.toRadians(displayVector.y * 0.1f));
+                System.out.println(camera.getPosition());
+            }
+            if (window.getMouseInput().getScroll().y != 0) {
+                projection.setFOV(projection.getFOV() - (window.getMouseInput().getScroll().y * 0.01f));
+                window.getMouseInput().setScroll(new Vector2f());
+                System.out.println(camera.getPosition());
+            }
+        }
+        if (pilihanKamera == 1) {
+            if (window.isKeyPressed(GLFW_KEY_W)) {
+                objects.get(1).translateObject(0.0f, 0.0f, -moveThirdPerson / 2);
+                objects.get(2).translateObject(0.0f, 0.0f, -moveThirdPerson / 2);
             }
             if (window.isKeyPressed(GLFW_KEY_A)) {
                 objects.get(1).translateObject(-moveThirdPerson, 0.0f, 0.0f);
                 objects.get(2).translateObject(-moveThirdPerson, 0.0f, 0.0f);
             }
             if (window.isKeyPressed(GLFW_KEY_S)) {
-                objects.get(1).translateObject(0.0f, 0.0f, moveThirdPerson/2);
-                objects.get(2).translateObject(0.0f, 0.0f, moveThirdPerson/2);
+                objects.get(1).translateObject(0.0f, 0.0f, moveThirdPerson / 2);
+                objects.get(2).translateObject(0.0f, 0.0f, moveThirdPerson / 2);
             }
             if (window.isKeyPressed(GLFW_KEY_D)) {
                 objects.get(1).translateObject(moveThirdPerson, 0.0f, 0.0f);
@@ -146,10 +200,10 @@ public class Main {
                 System.out.println(camera.getPosition());
             }
             if (window.isKeyPressed(GLFW_KEY_UP)) {
-                camera.moveUp(moveThirdPerson/2);
+                camera.moveUp(moveThirdPerson / 2);
             }
             if (window.isKeyPressed(GLFW_KEY_DOWN)) {
-                camera.moveDown(moveThirdPerson/2);
+                camera.moveDown(moveThirdPerson / 2);
             }
             if (window.isKeyPressed(GLFW_KEY_LEFT)) {
                 camera.moveLeft(moveThirdPerson);
@@ -169,6 +223,42 @@ public class Main {
             }
         }
 
+        if (pilihanKamera == 2) {
+            if (window.isKeyPressed(GLFW_KEY_W)) {
+                thirdPersonCamera.moveDown(move);
+                System.out.println(thirdPersonCamera.getPosition());
+            }
+            if (window.isKeyPressed(GLFW_KEY_A)) {
+                thirdPersonCamera.moveRight(move);
+                System.out.println(thirdPersonCamera.getPosition());
+            }
+            if (window.isKeyPressed(GLFW_KEY_S)) {
+                thirdPersonCamera.moveUp(move);
+                System.out.println(thirdPersonCamera.getPosition());
+            }
+            if (window.isKeyPressed(GLFW_KEY_D)) {
+                thirdPersonCamera.moveLeft(move);
+                System.out.println(thirdPersonCamera.getPosition());
+            }
+            if (window.isKeyPressed(GLFW_KEY_T)) {
+                thirdPersonCamera.moveForward(move);
+                System.out.println(thirdPersonCamera.getPosition());
+            }
+            if (window.isKeyPressed(GLFW_KEY_G)) {
+                thirdPersonCamera.moveBackwards(move);
+                System.out.println(thirdPersonCamera.getPosition());
+            }
+            if (window.getMouseInput().isLeftButtonPressed()) {
+                Vector2f displayVector = window.getMouseInput().getDisplVec();
+                thirdPersonCamera.addRotation((float) Math.toRadians(displayVector.x * 0.1f), (float) Math.toRadians(displayVector.y * 0.1f));
+                System.out.println(thirdPersonCamera.getPosition());
+            }
+            if (window.getMouseInput().getScroll().y != 0) {
+                projection.setFOV(projection.getFOV() - (window.getMouseInput().getScroll().y * 0.01f));
+                window.getMouseInput().setScroll(new Vector2f());
+                System.out.println(thirdPersonCamera.getPosition());
+            }
+        }
         if (pilihanKamera == 2) {
             if (window.isKeyPressed(GLFW_KEY_W)) {
                 objects.get(1).translateObject(moveThirdPerson, 0.0f, 0.0f);
@@ -264,6 +354,8 @@ public class Main {
                     object.draw(firstPersonCamera, projection);
                 }
             }
+
+            skyboxRenderer.draw(camera, projection);
 
             glDisableVertexAttribArray(0);
             glfwPollEvents();
