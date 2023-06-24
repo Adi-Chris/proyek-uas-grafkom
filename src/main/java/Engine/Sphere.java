@@ -418,7 +418,7 @@ public class Sphere extends Object {
         faces.add(facesVec);
     }
 
-    public void loadTexture(String filename) throws Exception {
+    public void loadTexture(String filename) throws Exception{
         int width, height;
         ByteBuffer buffer;
 
