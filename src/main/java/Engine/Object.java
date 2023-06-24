@@ -61,7 +61,7 @@ public class Object extends ShaderProgram {
 
     public void drawSetup(Camera camera, Projection projection) {
         bind();
-        uniformsMap.setUniform("uni_color", color);
+//        uniformsMap.setUniform("uni_color", color);
         uniformsMap.setUniform("model", model);
         uniformsMap.setUniform("view", camera.getViewMatrix());
         uniformsMap.setUniform("projection", projection.getProjMatrix());

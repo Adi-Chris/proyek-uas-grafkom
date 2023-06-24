@@ -7,10 +7,21 @@ import org.joml.*;
 import org.lwjgl.assimp.*;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
+import org.joml.Vector2f;
+import org.joml.Vector3f;
+import org.joml.Vector3i;
+import org.joml.Vector4f;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL30;
+import org.lwjgl.stb.STBImage;
+import org.lwjgl.system.MemoryStack;
 
 import java.io.FileInputStream;
 import java.lang.Math;
 import java.nio.ByteBuffer;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -33,6 +44,9 @@ public class Sphere extends Object {
     int textures;
     List<Vector3f> normal;
     int nbo;
+    int tex_tbo;
+    int tbo;
+    List<Vector2f> textureCoordinates;
 
     public Sphere(List<ShaderModuleData> shaderModuleDataList, List<Vector3f> vertices, Vector4f color, float centerX, float centerY, float centerZ, float radiusX, float radiusY, float radiusZ) {
         super(shaderModuleDataList, vertices, color);
@@ -43,9 +57,14 @@ public class Sphere extends Object {
         this.radiusY = radiusY;
         this.radiusZ = radiusZ;
 //        createBox();
-        loadObjModel("/models/racingtrack.obj");
+        loadObjModel("/models/sirkuitbaru2.obj");
         setIbo();
         setupVAOVBO();
+        try {
+            loadTexture("C:/Users/ASUS ROG/Projects/grafkom/proyek-uas-grafkom/src/main/resources/textures/texture.png");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void setIbo() {
@@ -58,6 +77,10 @@ public class Sphere extends Object {
     public void draw(Camera camera, Projection projection) {
         drawSetup(camera, projection);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, tex_tbo);
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glCullFace(GL11.GL_BACK);
         glDrawElements(GL_TRIANGLES, index.size(), GL_UNSIGNED_INT, 0);
     }
 
@@ -215,11 +238,14 @@ public class Sphere extends Object {
         //nbo
         nbo = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, nbo);
-        glBufferData(GL_ARRAY_BUFFER,
-                Utils.listoFloat(normal),
-                GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, Utils.listoFloat(normal), GL_STATIC_DRAW);
 //        uniformsMap.createUniform("lightColor");
 //        uniformsMap.createUniform("lightPos");
+
+        //tbo
+        tbo = glGenBuffers();
+        glBindBuffer(GL_ARRAY_BUFFER, tbo);
+        glBufferData(GL_ARRAY_BUFFER, Utils.listoFloat2(textureCoordinates), GL_STATIC_DRAW);
     }
 
     public void drawSetup(Camera camera, Projection projection) {
@@ -265,6 +291,13 @@ public class Sphere extends Object {
         uniformsMap.setUniform("spotLight.cutOff", (float) Math.cos(Math.toRadians(12.5f)));
         uniformsMap.setUniform("spotLight.outerCutOff", (float) Math.cos(Math.toRadians(12.5f)));
         uniformsMap.setUniform("viewPos", camera.getPosition());
+
+        uniformsMap.setUniform("textureSampler", 0);
+
+        // bind texture
+        glEnableVertexAttribArray(2);
+        glBindBuffer(GL_ARRAY_BUFFER, tbo);
+        glVertexAttribPointer(2, 2, GL_FLOAT, false, 0, 0);
     }
 
     public void loadObjModel(String fileName) {
@@ -333,6 +366,7 @@ public class Sphere extends Object {
         this.vertices = Utils.floatToList(verticesArr);
         this.normal = Utils.floatToList(normalArr);
         this.index = Utils.intToList(indicesArr);
+        this.textureCoordinates = Utils.floatToList2(texCoordArr);
     }
     public int loadCubeMap(String[]textureFiles){
         int texID = GL11.glGenTextures();
@@ -375,7 +409,7 @@ public class Sphere extends Object {
         if (texCoord >= 0) {
             Vector2f texCoordVec = texCoordList.get(texCoord);
             texCoordArr[pos * 2] = texCoordVec.x;
-            texCoordArr[pos * 2 + 1] = texCoordVec.y;
+            texCoordArr[pos * 2 + 1] = 1 - texCoordVec.y;
         }
 
         if (normal >= 0) {
@@ -400,5 +434,34 @@ public class Sphere extends Object {
         }
         Vector3i facesVec = new Vector3i(pos, coords, normal);
         faces.add(facesVec);
+    }
+
+    public void loadTexture(String filename) throws Exception{
+        int width, height;
+        ByteBuffer buffer;
+
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            IntBuffer w = stack.mallocInt(1);
+            IntBuffer h = stack.mallocInt(1);
+            IntBuffer c = stack.mallocInt(1);
+
+            buffer = STBImage.stbi_load(filename, w, h, c, 4);
+            if (buffer == null)
+                throw new Exception("Image File " + filename + " not load " + STBImage.stbi_failure_reason());
+
+            width = w.get();
+            height = h.get();
+        }
+
+        int texID = GL11.glGenTextures();
+
+        //bind texture
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, texID);
+        GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0 ,GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+        GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+        STBImage.stbi_image_free(buffer);
+        tex_tbo = texID;
+        System.out.println("tex_tbo:" + tex_tbo);
     }
 }
