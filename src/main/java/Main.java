@@ -133,6 +133,7 @@ public class Main {
         if (window.isKeyPressed(GLFW_KEY_3)) {
             pilihanKamera = 3;
             firstPersonCamera.setPosition(objects.get(1).updateCenterPoint().x - 0.006f, objects.get(1).updateCenterPoint().y + 0.005f, objects.get(1).updateCenterPoint().z);
+//            firstPersonCamera.setPosition(objects.get(2).updateCenterPoint().x - 0.006f, objects.get(2).updateCenterPoint().y + 0.005f, objects.get(2).updateCenterPoint().z);
             firstPersonCamera.addRotation((float) Math.toRadians(0.0f), (float) Math.toRadians(90.0f));
         }
 
@@ -209,53 +210,49 @@ public class Main {
                 objects.get(2).translateObject(0.0f, 0.0f, moveThirdPerson);
                 thirdPersonCamera.moveRight(moveThirdPerson);
             }
-            if (window.getMouseInput().isLeftButtonPressed()) {
-                Vector2f displayVector = window.getMouseInput().getDisplVec();
-                thirdPersonCamera.addRotation((float) Math.toRadians(displayVector.x * 0.1f), (float) Math.toRadians(displayVector.y * 0.1f));
-                System.out.println(thirdPersonCamera.getPosition());
-            }
-            if (window.getMouseInput().getScroll().y != 0) {
-                projection.setFOV(projection.getFOV() - (window.getMouseInput().getScroll().y * 0.01f));
-                window.getMouseInput().setScroll(new Vector2f());
-                System.out.println(thirdPersonCamera.getPosition());
-            }
+//            if (window.getMouseInput().isLeftButtonPressed()) {
+//                Vector2f displayVector = window.getMouseInput().getDisplVec();
+//                thirdPersonCamera.addRotation((float) Math.toRadians(displayVector.x * 0.1f), (float) Math.toRadians(displayVector.y * 0.1f));
+//                System.out.println(thirdPersonCamera.getPosition());
+//            }
+//            if (window.getMouseInput().getScroll().y != 0) {
+//                projection.setFOV(projection.getFOV() - (window.getMouseInput().getScroll().y * 0.01f));
+//                window.getMouseInput().setScroll(new Vector2f());
+//                System.out.println(thirdPersonCamera.getPosition());
+//            }
         }
 
         if (pilihanKamera == 3) {
             if (window.isKeyPressed(GLFW_KEY_W)) {
-                firstPersonCamera.moveDown(move);
-                System.out.println(firstPersonCamera.getPosition());
+                objects.get(1).translateObject(moveThirdPerson, 0.0f, 0.0f);
+                objects.get(2).translateObject(moveThirdPerson, 0.0f, 0.0f);
+                firstPersonCamera.moveForward(moveThirdPerson);
             }
             if (window.isKeyPressed(GLFW_KEY_A)) {
-                firstPersonCamera.moveRight(move);
-                System.out.println(firstPersonCamera.getPosition());
+                objects.get(1).translateObject(0.0f, 0.0f, -moveThirdPerson);
+                objects.get(2).translateObject(0.0f, 0.0f, -moveThirdPerson);
+                firstPersonCamera.moveLeft(moveThirdPerson);
             }
             if (window.isKeyPressed(GLFW_KEY_S)) {
-                firstPersonCamera.moveUp(move);
-                System.out.println(firstPersonCamera.getPosition());
+                objects.get(1).translateObject(-moveThirdPerson, 0.0f, 0.0f);
+                objects.get(2).translateObject(-moveThirdPerson, 0.0f, 0.0f);
+                firstPersonCamera.moveBackwards(moveThirdPerson);
             }
             if (window.isKeyPressed(GLFW_KEY_D)) {
-                firstPersonCamera.moveLeft(move);
-                System.out.println(firstPersonCamera.getPosition());
+                objects.get(1).translateObject(0.0f, 0.0f, moveThirdPerson);
+                objects.get(2).translateObject(0.0f, 0.0f, moveThirdPerson);
+                firstPersonCamera.moveRight(moveThirdPerson);
             }
-            if (window.isKeyPressed(GLFW_KEY_T)) {
-                firstPersonCamera.moveForward(move);
-                System.out.println(firstPersonCamera.getPosition());
-            }
-            if (window.isKeyPressed(GLFW_KEY_G)) {
-                firstPersonCamera.moveBackwards(move);
-                System.out.println(firstPersonCamera.getPosition());
-            }
-            if (window.getMouseInput().isLeftButtonPressed()) {
-                Vector2f displayVector = window.getMouseInput().getDisplVec();
-                firstPersonCamera.addRotation((float) Math.toRadians(displayVector.x * 0.1f), (float) Math.toRadians(displayVector.y * 0.1f));
-                System.out.println(firstPersonCamera.getPosition());
-            }
-            if (window.getMouseInput().getScroll().y != 0) {
-                projection.setFOV(projection.getFOV() - (window.getMouseInput().getScroll().y * 0.01f));
-                window.getMouseInput().setScroll(new Vector2f());
-                System.out.println(firstPersonCamera.getPosition());
-            }
+//            if (window.getMouseInput().isLeftButtonPressed()) {
+//                Vector2f displayVector = window.getMouseInput().getDisplVec();
+//                firstPersonCamera.addRotation((float) Math.toRadians(displayVector.x * 0.1f), (float) Math.toRadians(displayVector.y * 0.1f));
+//                System.out.println(firstPersonCamera.getPosition());
+//            }
+//            if (window.getMouseInput().getScroll().y != 0) {
+//                projection.setFOV(projection.getFOV() - (window.getMouseInput().getScroll().y * 0.01f));
+//                window.getMouseInput().setScroll(new Vector2f());
+//                System.out.println(firstPersonCamera.getPosition());
+//            }
         }
     }
 
