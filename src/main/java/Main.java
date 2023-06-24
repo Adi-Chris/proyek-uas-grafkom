@@ -18,12 +18,25 @@ public class Main {
     ArrayList<Object> objects = new ArrayList<>();
     Camera camera = new Camera();
     Projection projection = new Projection(window.getWidth(),window.getHeight());
+    private SkyboxRenderer skyboxRenderer;
     public void init(){
         window.init();
         GL.createCapabilities();
 //        camera.setPosition(0.0f,  0.0f, 0.5f);
         camera.setPosition(0.0f,  0.1f, 0.006f);
         camera.setRotation((float)Math.toRadians(90.0f),(float)Math.toRadians(0.0f));
+        skyboxRenderer = new SkyboxRenderer(
+                Arrays.asList(
+                        new ShaderProgram.ShaderModuleData(
+                                "resources/shaders/skyboxVertexShader.vert"
+                                , GL_VERTEX_SHADER),
+                        new ShaderProgram.ShaderModuleData(
+                                "resources/shaders/skyboxFragmentShader.frag"
+                                , GL_FRAGMENT_SHADER)
+                ),
+                new ArrayList<>(),
+                new Vector4f()
+        );
 
         objects.add(new Sphere(
             Arrays.asList(
@@ -142,6 +155,8 @@ public class Main {
             for(Object object:objects){
                 object.draw(camera,projection);
             }
+
+            skyboxRenderer.draw(camera,projection);
 
             glDisableVertexAttribArray(0);
             glfwPollEvents();

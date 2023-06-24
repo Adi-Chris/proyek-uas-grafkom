@@ -40,7 +40,6 @@ public class Sphere extends Object {
     float radiusZ;
     List<Integer> index;
     int ibo;
-    int textures;
     List<Vector3f> normal;
     int nbo;
     int tex_tbo;
@@ -61,7 +60,7 @@ public class Sphere extends Object {
             setIbo();
             setupVAOVBO();
             try {
-                loadTexture("C:/Users/ASUS ROG/Projects/grafkom/proyek-uas-grafkom/src/main/resources/textures/texture.png");
+                loadTexture("E:/Downloads/proyek-uas-grafkom/src/main/resources/textures/texture.png");
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -70,7 +69,7 @@ public class Sphere extends Object {
             setIbo();
             setupVAOVBO();
             try {
-                loadTexture("C:/Users/ASUS ROG/Projects/grafkom/proyek-uas-grafkom/src/main/resources/textures/texture2.png");
+                loadTexture("E:/Downloads/proyek-uas-grafkom/src/main/resources/textures/texture2.png");
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -79,7 +78,7 @@ public class Sphere extends Object {
             setIbo();
             setupVAOVBO();
             try {
-                loadTexture("C:/Users/ASUS ROG/Projects/grafkom/proyek-uas-grafkom/src/main/resources/textures/texture3.png");
+                loadTexture("E:/Downloads/proyek-uas-grafkom/src/main/resources/textures/texture3.png");
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -386,43 +385,8 @@ public class Sphere extends Object {
         this.index = Utils.intToList(indicesArr);
         this.textureCoordinates = Utils.floatToList2(texCoordArr);
     }
-    public int loadCubeMap(String[]textureFiles){
-        int texID = GL11.glGenTextures();
-        GL13.glActiveTexture(GL13.glGenTextures());
-        GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, texID);
 
-        for (int i=0;1<textureFiles.length;i++){
-            TextureData data = decodeTextureFile("res/" + textureFiles[i] + ".png");
-            GL11.glTexImage2D(GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_X + 1,0, GL11.GL_RGBA, data.getWidth(), data.getHeight(), 0,GL_RGBA, GL11.GL_UNSIGNED_BYTE, data.getBuffer());
-        }
-        GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
-        GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-        textures = texID;
-        return texID;
-    }
-    private TextureData decodeTextureFile(String fileName) {
-        int width = 0;
-        int height = 0;
-        ByteBuffer buffer = null;
-        try {
-            FileInputStream in = new FileInputStream(fileName);
-            PNGDecoder decoder = new PNGDecoder(in);
-            width = decoder.getWidth();
-            height = decoder.getHeight();
-            buffer = ByteBuffer.allocateDirect(4 * width * height);
-            decoder.decode(buffer, width * 4, PNGDecoder.Format.RGBA);
-            buffer.flip();
-            in.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("Tried to load texture " + fileName + ", didn't work");
-            System.exit(-1);
-        }
-        return new TextureData(buffer, width, height);
-    }
-
-    private static void processVertex(int pos, int texCoord, int normal, List<Vector2f> texCoordList, List<Vector3f> normalList,
-                                      List<Integer> indicesList, float[] texCoordArr, float[] normalArr) {
+    private static void processVertex(int pos, int texCoord, int normal, List<Vector2f> texCoordList, List<Vector3f> normalList, List<Integer> indicesList, float[] texCoordArr, float[] normalArr) {
         indicesList.add(pos);
         if (texCoord >= 0) {
             Vector2f texCoordVec = texCoordList.get(texCoord);
