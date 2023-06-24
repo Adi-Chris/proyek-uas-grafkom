@@ -1,5 +1,12 @@
 package Engine;
 
+import Texture .*;
+import Texture.TextureData;
+import de.matthiasmann.twl.utils.PNGDecoder;
+import org.joml.*;
+import org.lwjgl.assimp.*;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
@@ -10,6 +17,9 @@ import org.lwjgl.opengl.GL30;
 import org.lwjgl.stb.STBImage;
 import org.lwjgl.system.MemoryStack;
 
+import java.io.FileInputStream;
+import java.lang.Math;
+import java.nio.ByteBuffer;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
@@ -30,6 +40,7 @@ public class Sphere extends Object {
     float radiusZ;
     List<Integer> index;
     int ibo;
+    int textures;
     List<Vector3f> normal;
     int nbo;
     int tex_tbo;
@@ -374,6 +385,40 @@ public class Sphere extends Object {
         this.normal = Utils.floatToList(normalArr);
         this.index = Utils.intToList(indicesArr);
         this.textureCoordinates = Utils.floatToList2(texCoordArr);
+    }
+    public int loadCubeMap(String[]textureFiles){
+        int texID = GL11.glGenTextures();
+        GL13.glActiveTexture(GL13.glGenTextures());
+        GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, texID);
+
+        for (int i=0;1<textureFiles.length;i++){
+            TextureData data = decodeTextureFile("res/" + textureFiles[i] + ".png");
+            GL11.glTexImage2D(GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_X + 1,0, GL11.GL_RGBA, data.getWidth(), data.getHeight(), 0,GL_RGBA, GL11.GL_UNSIGNED_BYTE, data.getBuffer());
+        }
+        GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+        GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+        textures = texID;
+        return texID;
+    }
+    private TextureData decodeTextureFile(String fileName) {
+        int width = 0;
+        int height = 0;
+        ByteBuffer buffer = null;
+        try {
+            FileInputStream in = new FileInputStream(fileName);
+            PNGDecoder decoder = new PNGDecoder(in);
+            width = decoder.getWidth();
+            height = decoder.getHeight();
+            buffer = ByteBuffer.allocateDirect(4 * width * height);
+            decoder.decode(buffer, width * 4, PNGDecoder.Format.RGBA);
+            buffer.flip();
+            in.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Tried to load texture " + fileName + ", didn't work");
+            System.exit(-1);
+        }
+        return new TextureData(buffer, width, height);
     }
 
     private static void processVertex(int pos, int texCoord, int normal, List<Vector2f> texCoordList, List<Vector3f> normalList,
