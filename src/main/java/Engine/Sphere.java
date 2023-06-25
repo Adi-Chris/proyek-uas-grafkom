@@ -109,15 +109,20 @@ public class Sphere extends Object {
 
         Vector3f[] _pointLightPositions = {
                 //( 4.576E-1  3.660E-2 -6.199E-2)
-                new Vector3f(0.4576f,0.0366f,-0.06199f),
+                // ( 4.614E-1  3.980E-2 -5.953E-2)
+                new Vector3f(0.4614f,0.0398f,-0.05953f),
                 // ( 3.868E-1  3.940E-2  1.792E-1)
-                new Vector3f(0.3868f,0.0394f,0.1792f),
+                // ( 3.970E-1  4.340E-2  1.731E-1)
+                new Vector3f(0.397f,0.0434f,0.1731f),
                 // ( 3.462E-1  3.980E-2  5.086E-1)
-                new Vector3f(0.3462f,0.0398f,0.5086f),
+                // ( 6.173E-2  4.580E-2  1.121E-1)
+                new Vector3f(0.6173f,0.0458f,0.1121f),
                 // ( 4.462E-2  3.740E-2  1.153E-1)
-                new Vector3f(0.04462f,0.0374f,0.1153f),
+                // (-2.545E-1  4.220E-2  1.072E-1)
+                new Vector3f(-0.2545f,0.00422f,0.1072f),
                 //(-2.373E-1  3.380E-2  1.074E-1)
-                new Vector3f(-0.2373f,0.0338f,0.1074f)
+                // ( 3.404E-1  4.180E-2  5.202E-1)
+                new Vector3f(0.3404f,0.0418f,0.5202f)
         };
         for (int i=0;i<_pointLightPositions.length;i++){
             uniformsMap.setUniform("pointLights["+ i +"].position", _pointLightPositions[i]);
