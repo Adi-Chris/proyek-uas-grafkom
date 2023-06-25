@@ -108,28 +108,23 @@ public class Sphere extends Object {
         uniformsMap.setUniform("dirLight.specular", new Vector3f(0.5f,0.5f,0.5f));
 
         Vector3f[] _pointLightPositions = {
-                //( 4.576E-1  3.660E-2 -6.199E-2)
-                // ( 4.614E-1  3.980E-2 -5.953E-2)
-                new Vector3f(0.4614f,0.0398f,-0.05953f),
-                // ( 3.868E-1  3.940E-2  1.792E-1)
-                // ( 3.970E-1  4.340E-2  1.731E-1)
-                new Vector3f(0.397f,0.0434f,0.1731f),
-                // ( 3.462E-1  3.980E-2  5.086E-1)
-                // ( 6.173E-2  4.580E-2  1.121E-1)
-                new Vector3f(0.6173f,0.0458f,0.1121f),
-                // ( 4.462E-2  3.740E-2  1.153E-1)
-                // (-2.545E-1  4.220E-2  1.072E-1)
-                new Vector3f(-0.2545f,0.00422f,0.1072f),
-                //(-2.373E-1  3.380E-2  1.074E-1)
-                // ( 3.404E-1  4.180E-2  5.202E-1)
-                new Vector3f(0.3404f,0.0418f,0.5202f)
+                // ( 4.935E-1  4.140E-2 -4.916E-2)
+                new Vector3f(0.4935f,0.04140f,-0.04916f),
+                // ( 3.501E-1  4.420E-2  1.829E-1)
+                new Vector3f(0.3501f,0.0442f,0.1829f),
+                // ( 6.036E-2  4.420E-2  1.092E-1)
+                new Vector3f(0.6036f,0.0442f,0.1092f),
+                // (-2.591E-1  4.420E-2  1.106E-1)
+                new Vector3f(-0.2591f,0.0042f,0.1206f),
+                // ( 3.251E-1  4.460E-2  5.189E-1)
+                new Vector3f(0.3251f,0.04460f,0.5189f)
         };
         for (int i=0;i<_pointLightPositions.length;i++){
             uniformsMap.setUniform("pointLights["+ i +"].position", _pointLightPositions[i]);
-            uniformsMap.setUniform("pointLights["+ i +"].ambient", new Vector3f(0.05f,0.05f,0.05f));
-            uniformsMap.setUniform("pointLights["+ i +"].diffuse", new Vector3f(0.8f,0.8f,0.8f));
-            uniformsMap.setUniform("pointLights["+ i +"].specular", new Vector3f(1.0f,1.0f,1.0f));
-            uniformsMap.setUniform("pointLights["+ i +"].constant",1.0f );
+            uniformsMap.setUniform("pointLights["+ i +"].ambient", new Vector3f(0.03f, 0.03f, 0.03f));
+            uniformsMap.setUniform("pointLights["+ i +"].diffuse", new Vector3f(0.5f, 0.5f, 0.5f)); // Adjusted diffuse value
+            uniformsMap.setUniform("pointLights["+ i +"].specular", new Vector3f(0.7f, 0.7f, 0.7f)); // Adjusted specular value
+            uniformsMap.setUniform("pointLights["+ i +"].constant", 0.8f);
             uniformsMap.setUniform("pointLights["+ i +"].linear", 0.09f);
             uniformsMap.setUniform("pointLights["+ i +"].quadratic", 0.032f);
         }
