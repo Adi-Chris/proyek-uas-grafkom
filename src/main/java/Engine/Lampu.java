@@ -75,154 +75,6 @@ public class Lampu extends Object {
         glDrawElements(GL_TRIANGLES, index.size(), GL_UNSIGNED_INT, 0);
     }
 
-    public void createBox() {
-        vertices.clear();
-        Vector3f temp = new Vector3f();
-        ArrayList<Vector3f> tempVertices = new ArrayList<>();
-        //Titik 1 kiri atas belakang
-        temp.x = centerX - radiusX / 2;
-        temp.y = centerY + radiusY / 2;
-        temp.z = centerZ - radiusZ / 2;
-        tempVertices.add(temp);
-        temp = new Vector3f();
-        //Titik 2 kiri bawah belakang
-        temp.x = centerX - radiusX / 2;
-        temp.y = centerY - radiusY / 2;
-        temp.z = centerZ - radiusZ / 2;
-        tempVertices.add(temp);
-        temp = new Vector3f();
-        //Titik 3 kanan bawah belakang
-        temp.x = centerX + radiusX / 2;
-        temp.y = centerY - radiusY / 2;
-        temp.z = centerZ - radiusZ / 2;
-        tempVertices.add(temp);
-        temp = new Vector3f();
-        //Titik 4 kanan atas belakang
-        temp.x = centerX + radiusX / 2;
-        temp.y = centerY + radiusY / 2;
-        temp.z = centerZ - radiusZ / 2;
-        tempVertices.add(temp);
-        temp = new Vector3f();
-        //Titik 5 kiri atas depan
-        temp.x = centerX - radiusX / 2;
-        temp.y = centerY + radiusY / 2;
-        temp.z = centerZ + radiusZ / 2;
-        tempVertices.add(temp);
-        temp = new Vector3f();
-        //Titik 6 kiri bawah depan
-        temp.x = centerX - radiusX / 2;
-        temp.y = centerY - radiusY / 2;
-        temp.z = centerZ + radiusZ / 2;
-        tempVertices.add(temp);
-        temp = new Vector3f();
-        //Titik 7 kanan bawah depan
-        temp.x = centerX + radiusX / 2;
-        temp.y = centerY - radiusY / 2;
-        temp.z = centerZ + radiusZ / 2;
-        tempVertices.add(temp);
-        temp = new Vector3f();
-        //Titik 8 kanan atas depan
-        temp.x = centerX + radiusX / 2;
-        temp.y = centerY + radiusY / 2;
-        temp.z = centerZ + radiusZ / 2;
-        tempVertices.add(temp);
-        temp = new Vector3f();
-
-        //kotak belakang
-        vertices.add(tempVertices.get(0));
-        vertices.add(tempVertices.get(1));
-        vertices.add(tempVertices.get(2));
-
-        vertices.add(tempVertices.get(2));
-        vertices.add(tempVertices.get(3));
-        vertices.add(tempVertices.get(0));
-        //kotak depan
-        vertices.add(tempVertices.get(4));
-        vertices.add(tempVertices.get(5));
-        vertices.add(tempVertices.get(6));
-
-        vertices.add(tempVertices.get(6));
-        vertices.add(tempVertices.get(7));
-        vertices.add(tempVertices.get(4));
-        //kotak samping kiri
-        vertices.add(tempVertices.get(0));
-        vertices.add(tempVertices.get(1));
-        vertices.add(tempVertices.get(4));
-
-        vertices.add(tempVertices.get(1));
-        vertices.add(tempVertices.get(5));
-        vertices.add(tempVertices.get(4));
-        //kotak samping kanan
-        vertices.add(tempVertices.get(7));
-        vertices.add(tempVertices.get(6));
-        vertices.add(tempVertices.get(2));
-
-        vertices.add(tempVertices.get(2));
-        vertices.add(tempVertices.get(3));
-        vertices.add(tempVertices.get(7));
-        //kotak bawah
-        vertices.add(tempVertices.get(1));
-        vertices.add(tempVertices.get(5));
-        vertices.add(tempVertices.get(6));
-
-        vertices.add(tempVertices.get(6));
-        vertices.add(tempVertices.get(2));
-        vertices.add(tempVertices.get(1));
-        //kotak atas
-        vertices.add(tempVertices.get(0));
-        vertices.add(tempVertices.get(4));
-        vertices.add(tempVertices.get(7));
-
-        vertices.add(tempVertices.get(7));
-        vertices.add(tempVertices.get(0));
-        vertices.add(tempVertices.get(3));
-
-        normal = new ArrayList<>(Arrays.asList(
-                //belakang
-                new Vector3f(0.0f, 0.0f, -1.0f),
-                new Vector3f(0.0f, 0.0f, -1.0f),
-                new Vector3f(0.0f, 0.0f, -1.0f),
-                new Vector3f(0.0f, 0.0f, -1.0f),
-                new Vector3f(0.0f, 0.0f, -1.0f),
-                new Vector3f(0.0f, 0.0f, -1.0f),
-                //depan
-                new Vector3f(0.0f, 0.0f, 1.0f),
-                new Vector3f(0.0f, 0.0f, 1.0f),
-                new Vector3f(0.0f, 0.0f, 1.0f),
-                new Vector3f(0.0f, 0.0f, 1.0f),
-                new Vector3f(0.0f, 0.0f, 1.0f),
-                new Vector3f(0.0f, 0.0f, 1.0f),
-                //kiri
-                new Vector3f(-1.0f, 0.0f, 0.0f),
-                new Vector3f(-1.0f, 0.0f, 0.0f),
-                new Vector3f(-1.0f, 0.0f, 0.0f),
-                new Vector3f(-1.0f, 0.0f, 0.0f),
-                new Vector3f(-1.0f, 0.0f, 0.0f),
-                new Vector3f(-1.0f, 0.0f, 0.0f),
-                //kanan
-                new Vector3f(1.0f, 0.0f, 0.0f),
-                new Vector3f(1.0f, 0.0f, 0.0f),
-                new Vector3f(1.0f, 0.0f, 0.0f),
-                new Vector3f(1.0f, 0.0f, 0.0f),
-                new Vector3f(1.0f, 0.0f, 0.0f),
-                new Vector3f(1.0f, 0.0f, 0.0f),
-                //bawah
-                new Vector3f(0.0f, -1.0f, 0.0f),
-                new Vector3f(0.0f, -1.0f, 0.0f),
-                new Vector3f(0.0f, -1.0f, 0.0f),
-                new Vector3f(0.0f, -1.0f, 0.0f),
-                new Vector3f(0.0f, -1.0f, 0.0f),
-                new Vector3f(0.0f, -1.0f, 0.0f),
-                //atas
-                new Vector3f(0.0f, 1.0f, 0.0f),
-                new Vector3f(0.0f, 1.0f, 0.0f),
-                new Vector3f(0.0f, 1.0f, 0.0f),
-                new Vector3f(0.0f, 1.0f, 0.0f),
-                new Vector3f(0.0f, 1.0f, 0.0f),
-                new Vector3f(0.0f, 1.0f, 0.0f)
-        ));
-    }
-
     public void setupVAOVBO() {
         super.setupVAOVBO();
 
@@ -230,8 +82,6 @@ public class Lampu extends Object {
         nbo = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, nbo);
         glBufferData(GL_ARRAY_BUFFER, Utils.listoFloat(normal), GL_STATIC_DRAW);
-//        uniformsMap.createUniform("lightColor");
-//        uniformsMap.createUniform("lightPos");
 
         //tbo
         tbo = glGenBuffers();
@@ -247,7 +97,7 @@ public class Lampu extends Object {
         glBindBuffer(GL_ARRAY_BUFFER, nbo);
         glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0);
 
-// directional light
+        // directional light
         uniformsMap.setUniform("dirLight.direction", new Vector3f(-0.0f,-0.0f,-0.0f));
         uniformsMap.setUniform("dirLight.ambient", new Vector3f(0.0f,0.0f,0.0f));
         uniformsMap.setUniform("dirLight.diffuse", new Vector3f(0.0f,0.0f,0.0f));

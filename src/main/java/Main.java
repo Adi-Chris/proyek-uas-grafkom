@@ -62,7 +62,7 @@ public class Main {
                 0.125f,
                 0.125f,
                 0.125f,
-                "/models/sirkuittanpatiang.obj", "C:\\Users\\ASUS ROG\\Projects\\grafkom\\proyek-uas-grafkom\\src\\main\\resources\\textures\\texture.png"
+                "/models/sirkuitfinalrilcuy2.obj", "C:\\Users\\ASUS ROG\\Projects\\grafkom\\proyek-uas-grafkom\\src\\main\\resources\\textures\\texture.png"
 
         ));
         objects.get(0).scaleObject(0.25f, 0.25f, 0.25f);
@@ -139,7 +139,6 @@ public class Main {
     }
 
     public void input() {
-        System.out.println(objects.get(2).updateCenterPoint());
         float move = 0.001f;
 
         if (window.isKeyPressed(GLFW_KEY_1) && pilihanKamera != 1) {
@@ -187,10 +186,10 @@ public class Main {
                 camera.moveBackwards(move);
             }
             if (window.isKeyPressed(GLFW_KEY_I)) {
-                camera.moveUp(move / 2);
+                camera.moveUp(move);
             }
             if (window.isKeyPressed(GLFW_KEY_K)) {
-                camera.moveDown(move / 2);
+                camera.moveDown(move);
             }
             if (window.isKeyPressed(GLFW_KEY_J)) {
                 camera.moveLeft(move);
