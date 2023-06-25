@@ -16,6 +16,7 @@ import static org.lwjgl.opengl.GL30.*;
 public class Main {
     private Window window = new Window(1000, 1000, "Window");
     ArrayList<Object> objects = new ArrayList<>();
+    ArrayList<Lampu> lampu = new ArrayList<>();
     Camera camera = new Camera();
     Projection projection = new Projection(window.getWidth(), window.getHeight());
     SkyboxRenderer skyboxRenderer;
@@ -28,7 +29,7 @@ public class Main {
         GL.createCapabilities();
         thirdPersonCamera.addRotation((float) Math.toRadians(0.0f), (float) Math.toRadians(90.0f));
         firstPersonCamera.addRotation((float) Math.toRadians(0.0f), (float) Math.toRadians(90.0f));
-        this.skyboxRenderer = new SkyboxRenderer(
+        skyboxRenderer = new SkyboxRenderer(
                 Arrays.asList(
                         new ShaderProgram.ShaderModuleData(
                                 "resources/shaders/skyboxVertexShader.vert"
@@ -61,7 +62,8 @@ public class Main {
                 0.125f,
                 0.125f,
                 0.125f,
-                1
+                "/models/sirkuittanpatiang.obj", "E:\\Downloads\\proyek-uas-grafkom\\src\\main\\resources\\textures\\texture.png"
+
         ));
         objects.get(0).scaleObject(0.1f, 0.1f, 0.1f);
 
@@ -83,7 +85,7 @@ public class Main {
                 0.125f,
                 0.125f,
                 0.125f,
-                2
+                "/models/supra2.obj", "E:\\Downloads\\proyek-uas-grafkom\\src\\main\\resources\\textures\\texture2.png"
         ));
         objects.get(1).scaleObject(0.0005f, 0.0005f, 0.0005f);
         objects.get(1).rotateObject((float) (Math.toRadians(90f)), 0f, 1f, 0f);
@@ -107,19 +109,38 @@ public class Main {
                 0.125f,
                 0.125f,
                 0.125f,
-                3
+                "/models/supra3.obj","E:\\Downloads\\proyek-uas-grafkom\\src\\main\\resources\\textures\\texture3.png"
         ));
         objects.get(2).scaleObject(0.0005f, 0.0005f, 0.0005f);
         objects.get(2).rotateObject((float) (Math.toRadians(90f)), 0f, 1f, 0f);
         objects.get(2).translateObject(0.015f, 0.001f, -0.001f);
 
-        objects.get(0).translateObject(0f, 0.4f, 0f);
-        objects.get(1).translateObject(0f, 0.4f, 0f);
-        objects.get(2).translateObject(0f, 0.4f, 0f);
+        lampu.add(new Lampu(
+                Arrays.asList(
+                        new ShaderProgram.ShaderModuleData(
+                                "resources/shaders/scene.vert"
+                                , GL_VERTEX_SHADER),
+                        new ShaderProgram.ShaderModuleData(
+                                "resources/shaders/scene.frag"
+                                , GL_FRAGMENT_SHADER)
+                ),
+                new ArrayList<>(),
+                new Vector4f(0.0f, 1.0f, 1.0f, 1.0f),
+                0.0f,
+                0.0f,
+                0.0f,
+                0.125f,
+                0.125f,
+                0.125f,
+                "/models/tiangonly.obj","E:\\Downloads\\proyek-uas-grafkom\\src\\main\\resources\\textures\\texture3.png"
+        ));
+        lampu.get(0).scaleObject(0.1f,0.1f,0.1f);
+        lampu.get(0).translateObject(0.08f,0.0f,0.0f);
 //        camera.moveUp();
     }
 
     public void input() {
+        System.out.println(objects.get(2).updateCenterPoint());
 //        float move = 0.00075f;
 //        float move = 0.01f;
         float move = 0.0005f;
@@ -302,6 +323,28 @@ public class Main {
                 firstPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
                 firstPersonCamera.moveUp(0.005f);
             }
+            if (window.isKeyPressed(GLFW_KEY_UP)) {
+                float x2 = objects.get(2).updateCenterPoint().x;
+                float y2 = objects.get(2).updateCenterPoint().y;
+                float z2 = objects.get(2).updateCenterPoint().z;
+                objects.get(1).moveUp(0.8f);
+                objects.get(2).moveUp(0.8f);
+                thirdPersonCamera.setPosition(x2, y2, z2);
+                thirdPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
+                thirdPersonCamera.moveBackwards(0.02f);
+                thirdPersonCamera.moveUp(0.005f);
+            }
+            if (window.isKeyPressed(GLFW_KEY_DOWN)) {
+                float x2 = objects.get(2).updateCenterPoint().x;
+                float y2 = objects.get(2).updateCenterPoint().y;
+                float z2 = objects.get(2).updateCenterPoint().z;
+                objects.get(1).moveDown(0.8f);
+                objects.get(2).moveDown(0.8f);
+                thirdPersonCamera.setPosition(x2, y2, z2);
+                thirdPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
+                thirdPersonCamera.moveBackwards(0.02f);
+                thirdPersonCamera.moveUp(0.005f);
+            }
         }
 
         if (pilihanKamera == 3) {
@@ -385,13 +428,22 @@ public class Main {
                 for (Object object : objects) {
                     object.draw(camera, projection);
                 }
+                for (Lampu lampu : lampu){
+                    lampu.draw(camera,projection);
+                }
             } else if (pilihanKamera == 2) {
                 for (Object object : objects) {
                     object.draw(thirdPersonCamera, projection);
                 }
+                for (Lampu lampu : lampu){
+                    lampu.draw(thirdPersonCamera,projection);
+                }
             } else if (pilihanKamera == 3) {
                 for (Object object : objects) {
                     object.draw(firstPersonCamera, projection);
+                }
+                for (Lampu lampu : lampu){
+                    lampu.draw(firstPersonCamera,projection);
                 }
             }
 

@@ -25,6 +25,7 @@ public class Object extends ShaderProgram {
     Matrix4f model;
     List<Object> childObject;
     Vector3f dir = new Vector3f(0, 0, 1);
+    Vector3f dir2 = new Vector3f(0, 1, 0);
 
     public List<Object> getChildObject() {
         return childObject;
@@ -134,6 +135,15 @@ public class Object extends ShaderProgram {
         for (Object child : childObject) {
             child.scaleObject(x, y, z);
         }
+    }
+    public void moveUp(Float amount) {
+        Matrix4f translationMatrix = new Matrix4f().translate(dir2.x * amount, dir2.y * amount, dir2.z * amount);
+        model = model.mul(translationMatrix);
+    }
+
+    public void moveDown(Float amount) {
+        Matrix4f translationMatrix = new Matrix4f().translate(-dir2.x * amount, -dir2.y * amount, -dir2.z * amount);
+        model = model.mul(translationMatrix);
     }
 
     public void moveForward(Float amount) {

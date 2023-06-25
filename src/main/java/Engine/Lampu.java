@@ -1,16 +1,15 @@
 package Engine;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 import org.joml.Vector4f;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.stb.STBImage;
 import org.lwjgl.system.MemoryStack;
 
-import java.lang.Math;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
@@ -18,11 +17,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 
-public class Sphere extends Object {
+public class Lampu extends Object {
     float centerX;
     float centerY;
     float centerZ;
@@ -39,7 +37,7 @@ public class Sphere extends Object {
     String elemen2;
     List<Vector2f> textureCoordinates;
 
-    public Sphere(List<ShaderModuleData> shaderModuleDataList, List<Vector3f> vertices, Vector4f color, float centerX, float centerY, float centerZ, float radiusX, float radiusY, float radiusZ, String element, String elemen2) {
+    public Lampu(List<ShaderModuleData> shaderModuleDataList, List<Vector3f> vertices, Vector4f color, float centerX, float centerY, float centerZ, float radiusX, float radiusY, float radiusZ, String element, String elemen2) {
         super(shaderModuleDataList, vertices, color);
         this.centerX = centerX;
         this.centerY = centerY;
@@ -250,10 +248,10 @@ public class Sphere extends Object {
         glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0);
 
 // directional light
-        uniformsMap.setUniform("dirLight.direction", new Vector3f(-0.2f,-1.0f,-0.3f));
-        uniformsMap.setUniform("dirLight.ambient", new Vector3f(0.05f,0.05f,0.05f));
-        uniformsMap.setUniform("dirLight.diffuse", new Vector3f(0.4f,0.4f,0.4f));
-        uniformsMap.setUniform("dirLight.specular", new Vector3f(0.5f,0.5f,0.5f));
+        uniformsMap.setUniform("dirLight.direction", new Vector3f(-0.0f,-0.0f,-0.0f));
+        uniformsMap.setUniform("dirLight.ambient", new Vector3f(0.0f,0.0f,0.0f));
+        uniformsMap.setUniform("dirLight.diffuse", new Vector3f(0.0f,0.0f,0.0f));
+        uniformsMap.setUniform("dirLight.specular", new Vector3f(0.0f,0.0f,0.0f));
 
         Vector3f[] _pointLightPositions = {
                 //( 2.121E-1  1.420E-2 -2.272E-2)
@@ -269,10 +267,11 @@ public class Sphere extends Object {
                 new Vector3f(-0.06057f,0.0142f,0.048f)
         };
         for (int i=0;i<_pointLightPositions.length;i++){
+            float dist = camera.getPosition().distance(_pointLightPositions[i]);
             uniformsMap.setUniform("pointLights["+ i +"].position", _pointLightPositions[i]);
             uniformsMap.setUniform("pointLights["+ i +"].ambient", new Vector3f(0.05f,0.05f,0.05f));
-            uniformsMap.setUniform("pointLights["+ i +"].diffuse", new Vector3f(0.8f,0.8f,0.8f));
-            uniformsMap.setUniform("pointLights["+ i +"].specular", new Vector3f(1.0f,1.0f,1.0f));
+            uniformsMap.setUniform("pointLights["+ i +"].diffuse", new Vector3f(0.8f,0.8f,0.8f).div(dist));
+            uniformsMap.setUniform("pointLights["+ i +"].specular", new Vector3f(1.0f,1.0f,1.0f).div(dist));
             uniformsMap.setUniform("pointLights["+ i +"].constant",1.0f );
             uniformsMap.setUniform("pointLights["+ i +"].linear", 0.09f);
             uniformsMap.setUniform("pointLights["+ i +"].quadratic", 0.032f);
