@@ -20,7 +20,6 @@ public class Object extends ShaderProgram {
     int vbo;
     Vector4f color;
     UniformsMap uniformsMap;
-    List<Vector3f> verticesColor;
     int vboColor;
     Matrix4f model;
     List<Object> childObject;
@@ -73,18 +72,6 @@ public class Object extends ShaderProgram {
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
     }
 
-    public void drawSetupWithVerticesColor() {
-        bind();
-
-        glEnableVertexAttribArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
-
-        glEnableVertexAttribArray(1);
-        glBindBuffer(GL_ARRAY_BUFFER, vboColor);
-        glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0);
-    }
-
     public void draw(Camera camera, Projection projection) {
         drawSetup(camera, projection);
         // Draw the vertices
@@ -100,15 +87,6 @@ public class Object extends ShaderProgram {
         for (Object child : childObject) {
             child.draw(camera, projection);
         }
-    }
-
-    public void drawLine() {
-//        drawSetup();
-        // Draw the vertices
-        glLineWidth(1);
-        glPointSize(1);
-        glDrawArrays(GL_LINE_STRIP, 0,
-                vertices.size());
     }
 
     public void addVertices(Vector3f newVector) {
