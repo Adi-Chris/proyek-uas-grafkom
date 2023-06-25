@@ -1,11 +1,8 @@
 package Engine;
 
+import org.joml.*;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
-import org.joml.Vector2f;
-import org.joml.Vector3f;
-import org.joml.Vector3i;
-import org.joml.Vector4f;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.stb.STBImage;
 import org.lwjgl.system.MemoryStack;
@@ -37,6 +34,9 @@ public class Sphere extends Object {
     int tbo;
     List<Vector2f> textureCoordinates;
 
+    // Hitbox
+    public AABB boundingBox;
+
     public Sphere(List<ShaderModuleData> shaderModuleDataList, List<Vector3f> vertices, Vector4f color, float centerX, float centerY, float centerZ, float radiusX, float radiusY, float radiusZ, int pilihan) {
         super(shaderModuleDataList, vertices, color);
         this.centerX = centerX;
@@ -51,25 +51,33 @@ public class Sphere extends Object {
             setIbo();
             setupVAOVBO();
             try {
-                loadTexture("C:\\Users\\ASUS ROG\\Projects\\grafkom\\proyek-uas-grafkom\\src\\main\\resources\\textures\\texture.png");
+                loadTexture("C:\\Users\\ADI CHRISTIAN\\OneDrive\\Documents\\Tugas-Tugas Kuliah\\Grafika Komputer\\ProyekUASGrafkom\\src\\main\\resources\\textures\\texture.png");
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         } else if (pilihan == 2) {
             loadObjModel("/models/supra2.obj");
+
+            // Hitbox
+            calculateBoundingBox();
+
             setIbo();
             setupVAOVBO();
             try {
-                loadTexture("C:\\Users\\ASUS ROG\\Projects\\grafkom\\proyek-uas-grafkom\\src\\main\\resources\\textures\\texture2.png");
+                loadTexture("C:\\Users\\ADI CHRISTIAN\\OneDrive\\Documents\\Tugas-Tugas Kuliah\\Grafika Komputer\\ProyekUASGrafkom\\src\\main\\resources\\textures\\texture2.png");
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         } else if (pilihan == 3) {
             loadObjModel("/models/supra3.obj");
+
+            // Hitbox
+            calculateBoundingBox();
+
             setIbo();
             setupVAOVBO();
             try {
-                loadTexture("C:\\Users\\ASUS ROG\\Projects\\grafkom\\proyek-uas-grafkom\\src\\main\\resources\\textures\\texture3.png");
+                loadTexture("C:\\Users\\ADI CHRISTIAN\\OneDrive\\Documents\\Tugas-Tugas Kuliah\\Grafika Komputer\\ProyekUASGrafkom\\src\\main\\resources\\textures\\texture3.png");
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -435,5 +443,189 @@ public class Sphere extends Object {
         GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
         STBImage.stbi_image_free(buffer);
         tex_tbo = texID;
+    }
+
+    // Hitbox
+    public void calculateBoundingBox() {
+        Vector3f min = new Vector3f(Float.POSITIVE_INFINITY);
+        Vector3f max = new Vector3f(Float.NEGATIVE_INFINITY);
+
+        // Check each vertice
+        for (Vector3f vertex : vertices) {
+            Vector4f transformedVertex = new Vector4f(vertex, 1.0f);
+            model.transform(transformedVertex);
+
+            // Update minimum and maximum values for each coordinate
+            min.x = Math.min(min.x, transformedVertex.x);
+            min.y = Math.min(min.y, transformedVertex.y);
+            min.z = Math.min(min.z, transformedVertex.z);
+            max.x = Math.max(max.x, transformedVertex.x);
+            max.y = Math.max(max.y, transformedVertex.y);
+            max.z = Math.max(max.z, transformedVertex.z);
+        }
+
+        if (boundingBox == null) {
+            boundingBox = new AABB(min, max);
+        } else {
+            boundingBox.updateAABBMixMax(min, max);
+        }
+    }
+
+    // Override buat hitbox
+    public void translateObject(Float offsetX, Float offsetY, Float offsetZ) {
+        super.translateObject(offsetX, offsetY, offsetZ);
+        calculateBoundingBox();
+    }
+
+    public void rotateObject(Float degree, Float offsetX, Float offsetY, Float offsetZ) {
+        super.rotateObject(degree, offsetX, offsetY, offsetZ);
+        calculateBoundingBox();
+    }
+
+    public void rotateObject2(float degree, float offsetX, float offsetY, float offsetZ, List<AABB> wallAABBs) {
+        Matrix4f originalModel = new Matrix4f(model); // Create a copy of the original model matrix
+        AABB originalBoundingBox = new AABB(boundingBox.getMin(), boundingBox.getMax());
+
+        // Rotate
+        model = new Matrix4f().rotate(degree, offsetX, offsetY, offsetZ).mul(new Matrix4f(model));
+        calculateBoundingBox();
+
+        // Check for collision with walls
+        boolean collisionDetected = false;
+        for (AABB wallAABB : wallAABBs) {
+            if (boundingBox.AABBIntersects(boundingBox, wallAABB)) {
+                System.out.println("COLLIDE ASEM");
+                // Collision detected, cancel rotation
+                model = originalModel; // Reset the model matrix to its original state
+                boundingBox = originalBoundingBox;
+                collisionDetected = true;
+                break;
+            }
+        }
+        System.out.println("Min: " + boundingBox.getMin());
+        System.out.println("Max: " + boundingBox.getMax());
+
+        if (!collisionDetected) {
+            // No collision detected, update child objects' rotations
+            for (Object child : childObject) {
+                ((Sphere)child).rotateObject2(degree, offsetX, offsetY, offsetZ, wallAABBs);
+            }
+        }
+    }
+
+    public boolean rotateObjectAroundLocalY(float degree, float offsetX, float offsetY, float offsetZ, List<AABB> wallAABBs) {
+        // Save old value
+        Matrix4f originalModel = new Matrix4f(model);
+        AABB originalBoundingBox = new AABB(boundingBox.getMin(), boundingBox.getMax());
+        Vector3f oldCenter = updateCenterPoint();
+
+        // Move to (0, 0, 0)
+        translateObject(-oldCenter.x, -oldCenter.y, -oldCenter.z);
+
+        // Rotate
+        model = new Matrix4f().rotate(degree, offsetX, offsetY, offsetZ).mul(new Matrix4f(model));
+
+        // Move to old center
+        translateObject(oldCenter.x, oldCenter.y, oldCenter.z);
+
+        // Recalculate bounding box
+        calculateBoundingBox();
+
+        // Check for collision with walls
+        boolean collisionDetected = false;
+        for (AABB wallAABB : wallAABBs) {
+            if (boundingBox.AABBIntersects(boundingBox, wallAABB)) {
+                // Collision detected, cancel rotation
+                model = originalModel; // Reset the model matrix to its original state
+                boundingBox = originalBoundingBox;
+                collisionDetected = true;
+                break;
+            }
+        }
+        System.out.println("Min: " + boundingBox.getMin());
+        System.out.println("Max: " + boundingBox.getMax());
+
+        if (!collisionDetected) {
+            // No collision detected, update child objects' rotations
+            for (Object child : childObject) {
+                ((Sphere)child).rotateObject2(degree, offsetX, offsetY, offsetZ, wallAABBs);
+            }
+        }
+
+        return collisionDetected;
+    }
+
+
+    public void scaleObject(Float x, Float y, Float z) {
+        super.scaleObject(x, y, z);
+        calculateBoundingBox();
+    }
+
+    public void moveForward(Float amount) {
+        super.moveForward(amount);
+        calculateBoundingBox();
+    }
+
+    public void moveForward2(float amount, List<AABB> wallAABBs) {
+        Matrix4f originalModel = new Matrix4f(model); // Create a copy of the original model matrix
+        AABB originalBoundingBox = new AABB(boundingBox.getMin(), boundingBox.getMax());
+
+        // Calculate the new position after movement
+        Matrix4f translationMatrix = new Matrix4f().translate(dir.x * amount, dir.y * amount, dir.z * amount);
+        model = model.mul(translationMatrix);
+        calculateBoundingBox();
+
+        // Check for collision with walls
+        boolean collisionDetected = false;
+        for (AABB wallAABB : wallAABBs) {
+            if (boundingBox.AABBIntersects(boundingBox, wallAABB)) {
+                // Collision detected, cancel movement
+                model = originalModel; // Reset the model matrix to its original state
+                boundingBox = originalBoundingBox;
+                collisionDetected = true;
+                break;
+            }
+        }
+
+        if (!collisionDetected) {
+            // No collision detected, update player position
+            for (Object child : childObject) {
+                ((Sphere)child).moveForward2(amount, wallAABBs);
+            }
+        }
+    }
+
+    public void moveBackward(Float amount) {
+        super.moveBackward(amount);
+        calculateBoundingBox();
+    }
+
+    public void moveBackward2(float amount, List<AABB> wallAABBs) {
+        Matrix4f originalModel = new Matrix4f(model); // Create a copy of the original model matrix
+        AABB originalBoundingBox = new AABB(boundingBox.getMin(), boundingBox.getMax());
+
+        // Calculate the new position after movement
+        Matrix4f translationMatrix = new Matrix4f().translate(-dir.x * amount, -dir.y * amount, -dir.z * amount);
+        model = model.mul(translationMatrix);
+        calculateBoundingBox();
+
+        // Check for collision with walls
+        boolean collisionDetected = false;
+        for (AABB wallAABB : wallAABBs) {
+            if (boundingBox.AABBIntersects(boundingBox, wallAABB)) {
+                // Collision detected, cancel movement
+                model = originalModel; // Reset the model matrix to its original state
+                boundingBox = originalBoundingBox;
+                collisionDetected = true;
+                break;
+            }
+        }
+
+        if (!collisionDetected) {
+            // No collision detected, update player position
+            for (Object child : childObject) {
+                ((Sphere)child).moveForward2(amount, wallAABBs);
+            }
+        }
     }
 }

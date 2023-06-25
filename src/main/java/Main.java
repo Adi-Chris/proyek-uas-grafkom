@@ -4,6 +4,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL30;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +16,7 @@ import static org.lwjgl.opengl.GL30.*;
 
 public class Main {
     private Window window = new Window(1000, 1000, "Window");
-    ArrayList<Object> objects = new ArrayList<>();
+    ArrayList<Sphere> objects = new ArrayList<>();
     Camera camera = new Camera();
     Projection projection = new Projection(window.getWidth(), window.getHeight());
     SkyboxRenderer skyboxRenderer;
@@ -26,6 +27,11 @@ public class Main {
     public void init() {
         window.init();
         GL.createCapabilities();
+
+        // Cull
+        GL30.glCullFace(GL30.GL_CULL_FACE);
+        GL30.glCullFace(GL_BACK);
+
         thirdPersonCamera.addRotation((float) Math.toRadians(0.0f), (float) Math.toRadians(90.0f));
         firstPersonCamera.addRotation((float) Math.toRadians(0.0f), (float) Math.toRadians(90.0f));
         this.skyboxRenderer = new SkyboxRenderer(
@@ -241,7 +247,11 @@ public class Main {
                 float y2 = objects.get(2).updateCenterPoint().y;
                 float z2 = objects.get(2).updateCenterPoint().z;
                 objects.get(1).moveForward(1f);
-                objects.get(2).moveForward(1f);
+//                objects.get(2).moveForward(1f);
+                    AABB aabb = new AABB(objects.get(1).boundingBox.getMin(), objects.get(1).boundingBox.getMax());
+                    ArrayList<AABB> aabbList = new ArrayList<>();
+                    aabbList.add(aabb);
+                    objects.get(2).moveForward2(1, aabbList);
                 thirdPersonCamera.setPosition(x2, y2, z2);
                 thirdPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
                 thirdPersonCamera.moveBackwards(0.02f);
@@ -257,10 +267,18 @@ public class Main {
                 objects.get(1).translateObject(-x, -y, -z);
                 objects.get(1).rotateObject((float) Math.toRadians(1.5), 0.0f, 1f, 0.0f);
                 objects.get(1).translateObject(x, y, z);
-                objects.get(2).translateObject(-x2, -y2, -z2);
-                objects.get(2).rotateObject((float) Math.toRadians(1.5), 0.0f, 1f, 0.0f);
-                objects.get(2).translateObject(x2, y2, z2);
-                count--;
+//                objects.get(2).translateObject(-x2, -y2, -z2);
+                    boolean colliding;
+                    AABB aabb = new AABB(objects.get(1).boundingBox.getMin(), objects.get(1).boundingBox.getMax());
+                    ArrayList<AABB> aabbList = new ArrayList<>();
+                    aabbList.add(aabb);
+//                    objects.get(2).rotateObject2((float) Math.toRadians(1.5), 0.0f, 1f, 0.0f, aabbList);
+                    colliding = objects.get(2).rotateObjectAroundLocalY((float) Math.toRadians(1.5), 0.0f, 1f, 0.0f, aabbList);
+//                objects.get(2).rotateObject((float) Math.toRadians(1.5), 0.0f, 1f, 0.0f);
+//                objects.get(2).translateObject(x2, y2, z2);
+                if (!colliding) {
+                    count--;
+                }
                 thirdPersonCamera.setPosition(x2, y2, z2);
                 thirdPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
                 thirdPersonCamera.moveBackwards(0.02f);
@@ -274,7 +292,11 @@ public class Main {
                 float y2 = objects.get(2).updateCenterPoint().y;
                 float z2 = objects.get(2).updateCenterPoint().z;
                 objects.get(1).moveBackward(1f);
-                objects.get(2).moveBackward(1f);
+//                objects.get(2).moveBackward(1f);
+                    AABB aabb = new AABB(objects.get(1).boundingBox.getMin(), objects.get(1).boundingBox.getMax());
+                    ArrayList<AABB> aabbList = new ArrayList<>();
+                    aabbList.add(aabb);
+                    objects.get(2).moveBackward2(1, aabbList);
                 thirdPersonCamera.setPosition(x2, y2, z2);
                 thirdPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
                 thirdPersonCamera.moveBackwards(0.02f);
@@ -290,10 +312,19 @@ public class Main {
                 objects.get(1).translateObject(-x, -y, -z);
                 objects.get(1).rotateObject((float) Math.toRadians(1.5), 0.0f, -1f, 0.0f);
                 objects.get(1).translateObject(x, y, z);
-                objects.get(2).translateObject(-x2, -y2, -z2);
-                objects.get(2).rotateObject((float) Math.toRadians(1.5), 0.0f, -1f, 0.0f);
-                objects.get(2).translateObject(x2, y2, z2);
-                count++;
+//                objects.get(2).translateObject(-x2, -y2, -z2);
+                    boolean colliding;
+                    AABB aabb = new AABB(objects.get(1).boundingBox.getMin(), objects.get(1).boundingBox.getMax());
+                    ArrayList<AABB> aabbList = new ArrayList<>();
+                    aabbList.add(aabb);
+//                    objects.get(2).rotateObject2((float) Math.toRadians(1.5), 0.0f, -1f, 0.0f, aabbList);
+                    colliding = objects.get(2).rotateObjectAroundLocalY((float) Math.toRadians(1.5), 0.0f, -1f, 0.0f, aabbList);
+//                objects.get(2).rotateObject((float) Math.toRadians(1.5), 0.0f, -1f, 0.0f);
+//                objects.get(2).translateObject(x2, y2, z2);
+                    if (!colliding) {
+                        count++;
+                    }
+
                 thirdPersonCamera.setPosition(x2, y2, z2);
                 thirdPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
                 thirdPersonCamera.moveBackwards(0.02f);
