@@ -11,7 +11,6 @@ import java.lang.Math;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.lwjgl.opengl.GL15.*;
@@ -315,24 +314,18 @@ public class Sphere extends Object {
         calculateBoundingBox();
     }
 
-    public void rotateObject(Float degree, Float offsetX, Float offsetY, Float offsetZ) {
-        super.rotateObject(degree, offsetX, offsetY, offsetZ);
-        calculateBoundingBox();
-    }
-
-    public void rotateObject2(float degree, float offsetX, float offsetY, float offsetZ, List<AABB> wallAABBs) {
+    public void translateObject2(Float offsetX, Float offsetY, Float offsetZ, List<AABB> wallAABBs) {
         Matrix4f originalModel = new Matrix4f(model); // Create a copy of the original model matrix
         AABB originalBoundingBox = new AABB(boundingBox.getMin(), boundingBox.getMax());
 
         // Rotate
-        model = new Matrix4f().rotate(degree, offsetX, offsetY, offsetZ).mul(new Matrix4f(model));
+        model = new Matrix4f().translate(offsetX, offsetY, offsetZ).mul(new Matrix4f(model));
         calculateBoundingBox();
 
         // Check for collision with walls
         boolean collisionDetected = false;
         for (AABB wallAABB : wallAABBs) {
             if (boundingBox.AABBIntersects(boundingBox, wallAABB)) {
-                System.out.println("COLLIDE ASEM");
                 // Collision detected, cancel rotation
                 model = originalModel; // Reset the model matrix to its original state
                 boundingBox = originalBoundingBox;
@@ -340,18 +333,23 @@ public class Sphere extends Object {
                 break;
             }
         }
-        System.out.println("Min: " + boundingBox.getMin());
-        System.out.println("Max: " + boundingBox.getMax());
+//        System.out.println("Min: " + boundingBox.getMin());
+//        System.out.println("Max: " + boundingBox.getMax());
 
         if (!collisionDetected) {
             // No collision detected, update child objects' rotations
             for (Object child : childObject) {
-                ((Sphere)child).rotateObject2(degree, offsetX, offsetY, offsetZ, wallAABBs);
+                ((Sphere)child).translateObject2(offsetX, offsetY, offsetZ, wallAABBs);
             }
         }
     }
 
-    public boolean rotateObjectAroundLocalY(float degree, float offsetX, float offsetY, float offsetZ, List<AABB> wallAABBs) {
+    public void rotateObject(Float degree, Float offsetX, Float offsetY, Float offsetZ) {
+        super.rotateObject(degree, offsetX, offsetY, offsetZ);
+        calculateBoundingBox();
+    }
+
+    public boolean rotateObjectCheckCollision(float degree, float offsetX, float offsetY, float offsetZ, List<AABB> wallAABBs) {
         // Save old value
         Matrix4f originalModel = new Matrix4f(model);
         AABB originalBoundingBox = new AABB(boundingBox.getMin(), boundingBox.getMax());
@@ -380,13 +378,13 @@ public class Sphere extends Object {
                 break;
             }
         }
-        System.out.println("Min: " + boundingBox.getMin());
-        System.out.println("Max: " + boundingBox.getMax());
+//        System.out.println("Min: " + boundingBox.getMin());
+//        System.out.println("Max: " + boundingBox.getMax());
 
         if (!collisionDetected) {
             // No collision detected, update child objects' rotations
             for (Object child : childObject) {
-                ((Sphere)child).rotateObject2(degree, offsetX, offsetY, offsetZ, wallAABBs);
+                ((Sphere)child).rotateObjectCheckCollision(degree, offsetX, offsetY, offsetZ, wallAABBs);
             }
         }
 
@@ -404,7 +402,7 @@ public class Sphere extends Object {
         calculateBoundingBox();
     }
 
-    public void moveForward2(float amount, List<AABB> wallAABBs) {
+    public void moveForwardCheckCollision(float amount, List<AABB> wallAABBs) {
         Matrix4f originalModel = new Matrix4f(model); // Create a copy of the original model matrix
         AABB originalBoundingBox = new AABB(boundingBox.getMin(), boundingBox.getMax());
 
@@ -428,7 +426,7 @@ public class Sphere extends Object {
         if (!collisionDetected) {
             // No collision detected, update player position
             for (Object child : childObject) {
-                ((Sphere)child).moveForward2(amount, wallAABBs);
+                ((Sphere)child).moveForwardCheckCollision(amount, wallAABBs);
             }
         }
     }
@@ -438,7 +436,7 @@ public class Sphere extends Object {
         calculateBoundingBox();
     }
 
-    public void moveBackward2(float amount, List<AABB> wallAABBs) {
+    public void moveBackwardCheckCollision(float amount, List<AABB> wallAABBs) {
         Matrix4f originalModel = new Matrix4f(model); // Create a copy of the original model matrix
         AABB originalBoundingBox = new AABB(boundingBox.getMin(), boundingBox.getMax());
 
@@ -462,7 +460,7 @@ public class Sphere extends Object {
         if (!collisionDetected) {
             // No collision detected, update player position
             for (Object child : childObject) {
-                ((Sphere)child).moveForward2(amount, wallAABBs);
+                ((Sphere)child).moveForwardCheckCollision(amount, wallAABBs);
             }
         }
     }
