@@ -350,7 +350,7 @@ public class Main {
             GL.createCapabilities();
             input();
 
-            skyboxRenderer.draw(camera, projection);
+            skyboxRenderer.draw(firstPersonCamera, projection);
 
             if (pilihanKamera == 1) {
                 for (Object object : objects) {
