@@ -62,7 +62,7 @@ public class Main {
                 0.125f,
                 0.125f,
                 0.125f,
-                "/models/sirkuitfinal.obj", "C:\\Users\\ASUS ROG\\Projects\\grafkom\\proyek-uas-grafkom\\src\\main\\resources\\textures\\texture.png"
+                "/models/sirkuitfinalrilcuy2.obj", "C:\\Users\\ASUS ROG\\Projects\\grafkom\\proyek-uas-grafkom\\src\\main\\resources\\textures\\texture.png"
 
         ));
         objects.get(0).scaleObject(0.25f, 0.25f, 0.25f);
