@@ -254,27 +254,38 @@ public class Lampu extends Object {
         uniformsMap.setUniform("dirLight.specular", new Vector3f(0.0f,0.0f,0.0f));
 
         Vector3f[] _pointLightPositions = {
-                //( 2.121E-1  1.420E-2 -2.272E-2)
-                new Vector3f(0.2121f,0.0142f,-0.02272f),
-                //( 1.651E-1  1.260E-2  7.599E-2)
-                //( 1.815E-1  1.420E-2  7.158E-2)
-                new Vector3f(0.1815f,0.0142f,0.07559f),
-                //( 1.644E-1  1.420E-2  2.149E-1)
-                new Vector3f(0.1644f,0.0142f,0.2149f),
-                //( 4.754E-2  1.420E-2  5.053E-2)
-                new Vector3f(0.04754f,0.0142f,0.05053f),
-                //(-6.057E-2  1.420E-2  4.800E-2)
-                new Vector3f(-0.06057f,0.0142f,0.048f)
+                // ( 4.935E-1  4.140E-2 -4.916E-2)
+                //( 4.764E-1  1.000E-3 -6.294E-2)
+                new Vector3f(0.4776f,0.0334f,-0.06378f),
+                // ( 3.501E-1  4.420E-2  1.829E-1)
+                //( 3.767E-1  1.000E-3  1.790E-1)
+                new Vector3f(0.3767f,0.0334f,0.1790f),
+                // ( 6.036E-2  4.420E-2  1.092E-1)
+                //( 3.424E-1  1.000E-3  5.408E-1)
+                new Vector3f(0.3424f,0.0334f,0.5408f),
+                // (-2.591E-1  4.420E-2  1.106E-1)
+                //( 4.353E-2  3.660E-2  1.151E-1)
+                new Vector3f(0.04353f,0.0334f,0.1151f),
+                // ( 3.251E-1  4.460E-2  5.189E-1)
+                //(-2.313E-1  3.340E-2  1.070E-1)
+                new Vector3f(-0.2313f,0.0334f,0.107f)
         };
         for (int i=0;i<_pointLightPositions.length;i++){
-            float dist = camera.getPosition().distance(_pointLightPositions[i]);
             uniformsMap.setUniform("pointLights["+ i +"].position", _pointLightPositions[i]);
-            uniformsMap.setUniform("pointLights["+ i +"].ambient", new Vector3f(0.05f,0.05f,0.05f));
-            uniformsMap.setUniform("pointLights["+ i +"].diffuse", new Vector3f(0.8f,0.8f,0.8f).div(dist));
-            uniformsMap.setUniform("pointLights["+ i +"].specular", new Vector3f(1.0f,1.0f,1.0f).div(dist));
+            uniformsMap.setUniform("pointLights["+ i +"].ambient", new Vector3f(0.06f,0.06f,0.06f));
+            uniformsMap.setUniform("pointLights["+ i +"].diffuse", new Vector3f(0.8f,0.8f,0.8f));
+            uniformsMap.setUniform("pointLights["+ i +"].specular", new Vector3f(1.0f,1.0f,1.0f));
             uniformsMap.setUniform("pointLights["+ i +"].constant",1.0f );
             uniformsMap.setUniform("pointLights["+ i +"].linear", 0.09f);
             uniformsMap.setUniform("pointLights["+ i +"].quadratic", 0.032f);
+//            float dist = camera.getPosition().distance(_pointLightPositions[i]);
+//            uniformsMap.setUniform("pointLights["+ i +"].position", _pointLightPositions[i]);
+//            uniformsMap.setUniform("pointLights["+ i +"].ambient", new Vector3f(0.06f,0.06f,0.06f));
+//            uniformsMap.setUniform("pointLights["+ i +"].diffuse", new Vector3f(0.8f,0.8f,0.8f).div(dist));
+//            uniformsMap.setUniform("pointLights["+ i +"].specular", new Vector3f(1.0f,1.0f,1.0f).div(dist));
+//            uniformsMap.setUniform("pointLights["+ i +"].constant",1.0f );
+//            uniformsMap.setUniform("pointLights["+ i +"].linear", 0.09f);
+//            uniformsMap.setUniform("pointLights["+ i +"].quadratic", 0.032f);
         }
 
         // spotlight
