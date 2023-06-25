@@ -51,7 +51,7 @@ public class Sphere extends Object {
             setIbo();
             setupVAOVBO();
             try {
-                loadTexture("E:\\Downloads\\proyek-uas-grafkom\\src\\main\\resources\\textures\\texture.png");
+                loadTexture("C:\\Users\\ASUS ROG\\Projects\\grafkom\\proyek-uas-grafkom\\src\\main\\resources\\textures\\texture.png");
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -60,7 +60,7 @@ public class Sphere extends Object {
             setIbo();
             setupVAOVBO();
             try {
-                loadTexture("E:\\Downloads\\proyek-uas-grafkom\\src\\main\\resources\\textures\\texture2.png");
+                loadTexture("C:\\Users\\ASUS ROG\\Projects\\grafkom\\proyek-uas-grafkom\\src\\main\\resources\\textures\\texture2.png");
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -69,7 +69,7 @@ public class Sphere extends Object {
             setIbo();
             setupVAOVBO();
             try {
-                loadTexture("E:\\Downloads\\proyek-uas-grafkom\\src\\main\\resources\\textures\\texture3.png");
+                loadTexture("C:\\Users\\ASUS ROG\\Projects\\grafkom\\proyek-uas-grafkom\\src\\main\\resources\\textures\\texture3.png");
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

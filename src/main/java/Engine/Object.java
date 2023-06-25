@@ -24,6 +24,7 @@ public class Object extends ShaderProgram {
     int vboColor;
     Matrix4f model;
     List<Object> childObject;
+    Vector3f dir = new Vector3f(0, 0, 1);
 
     public List<Object> getChildObject() {
         return childObject;
@@ -133,5 +134,15 @@ public class Object extends ShaderProgram {
         for (Object child : childObject) {
             child.scaleObject(x, y, z);
         }
+    }
+
+    public void moveForward(Float amount) {
+        Matrix4f translationMatrix = new Matrix4f().translate(dir.x * amount, dir.y * amount, dir.z * amount);
+        model = model.mul(translationMatrix);
+    }
+
+    public void moveBackward(Float amount) {
+        Matrix4f translationMatrix = new Matrix4f().translate(-dir.x * amount, -dir.y * amount, -dir.z * amount);
+        model = model.mul(translationMatrix);
     }
 }
