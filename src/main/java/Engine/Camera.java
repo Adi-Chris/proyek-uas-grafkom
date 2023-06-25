@@ -2,6 +2,8 @@ package Engine;
 
 import org.joml.*;
 
+import java.lang.Math;
+
 public class Camera {
     private Vector3f direction;
     private Vector3f position;
@@ -21,8 +23,8 @@ public class Camera {
 
     public void addRotation(float x, float y) {
         rotation.add(x, y);
-//        viewMatrix.(direction);
         recalculate();
+        updateDirection();
     }
 
     public Vector3f getPosition() {
@@ -88,5 +90,12 @@ public class Camera {
 
     public Vector3f getDirection() {
         return direction;
+    }
+
+    private void updateDirection() {
+        direction.set((float) (Math.cos(rotation.y) * Math.sin(rotation.x)),
+                (float) -Math.sin(rotation.y),
+                (float) (Math.cos(rotation.y) * Math.cos(rotation.x)));
+        direction.normalize();
     }
 }
