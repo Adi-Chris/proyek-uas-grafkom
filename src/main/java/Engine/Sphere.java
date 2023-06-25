@@ -32,12 +32,14 @@ public class Sphere extends Object {
     int nbo;
     int tex_tbo;
     int tbo;
+    String element;
+    String elemen2;
     List<Vector2f> textureCoordinates;
 
     // Hitbox
     public AABB boundingBox;
 
-    public Sphere(List<ShaderModuleData> shaderModuleDataList, List<Vector3f> vertices, Vector4f color, float centerX, float centerY, float centerZ, float radiusX, float radiusY, float radiusZ, int pilihan) {
+    public Sphere(List<ShaderModuleData> shaderModuleDataList, List<Vector3f> vertices, Vector4f color, float centerX, float centerY, float centerZ, float radiusX, float radiusY, float radiusZ, String element, String elemen2) {
         super(shaderModuleDataList, vertices, color);
         this.centerX = centerX;
         this.centerY = centerY;
@@ -45,42 +47,16 @@ public class Sphere extends Object {
         this.radiusX = radiusX;
         this.radiusY = radiusY;
         this.radiusZ = radiusZ;
+        this.element = element;
+        this.elemen2 = elemen2;
 //        createBox();
-        if (pilihan == 1) {
-            loadObjModel("/models/sirkuitbaru2.obj");
-            setIbo();
-            setupVAOVBO();
-            try {
-                loadTexture("C:\\Users\\ADI CHRISTIAN\\OneDrive\\Documents\\Tugas-Tugas Kuliah\\Grafika Komputer\\ProyekUASGrafkom\\src\\main\\resources\\textures\\texture.png");
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        } else if (pilihan == 2) {
-            loadObjModel("/models/supra2.obj");
-
-            // Hitbox
-            calculateBoundingBox();
-
-            setIbo();
-            setupVAOVBO();
-            try {
-                loadTexture("C:\\Users\\ADI CHRISTIAN\\OneDrive\\Documents\\Tugas-Tugas Kuliah\\Grafika Komputer\\ProyekUASGrafkom\\src\\main\\resources\\textures\\texture2.png");
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        } else if (pilihan == 3) {
-            loadObjModel("/models/supra3.obj");
-
-            // Hitbox
-            calculateBoundingBox();
-
-            setIbo();
-            setupVAOVBO();
-            try {
-                loadTexture("C:\\Users\\ADI CHRISTIAN\\OneDrive\\Documents\\Tugas-Tugas Kuliah\\Grafika Komputer\\ProyekUASGrafkom\\src\\main\\resources\\textures\\texture3.png");
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+        loadObjModel(element);
+        setIbo();
+        setupVAOVBO();
+        try {
+            loadTexture(elemen2);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -99,154 +75,6 @@ public class Sphere extends Object {
         GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glCullFace(GL11.GL_BACK);
         glDrawElements(GL_TRIANGLES, index.size(), GL_UNSIGNED_INT, 0);
-    }
-
-    public void createBox() {
-        vertices.clear();
-        Vector3f temp = new Vector3f();
-        ArrayList<Vector3f> tempVertices = new ArrayList<>();
-        //Titik 1 kiri atas belakang
-        temp.x = centerX - radiusX / 2;
-        temp.y = centerY + radiusY / 2;
-        temp.z = centerZ - radiusZ / 2;
-        tempVertices.add(temp);
-        temp = new Vector3f();
-        //Titik 2 kiri bawah belakang
-        temp.x = centerX - radiusX / 2;
-        temp.y = centerY - radiusY / 2;
-        temp.z = centerZ - radiusZ / 2;
-        tempVertices.add(temp);
-        temp = new Vector3f();
-        //Titik 3 kanan bawah belakang
-        temp.x = centerX + radiusX / 2;
-        temp.y = centerY - radiusY / 2;
-        temp.z = centerZ - radiusZ / 2;
-        tempVertices.add(temp);
-        temp = new Vector3f();
-        //Titik 4 kanan atas belakang
-        temp.x = centerX + radiusX / 2;
-        temp.y = centerY + radiusY / 2;
-        temp.z = centerZ - radiusZ / 2;
-        tempVertices.add(temp);
-        temp = new Vector3f();
-        //Titik 5 kiri atas depan
-        temp.x = centerX - radiusX / 2;
-        temp.y = centerY + radiusY / 2;
-        temp.z = centerZ + radiusZ / 2;
-        tempVertices.add(temp);
-        temp = new Vector3f();
-        //Titik 6 kiri bawah depan
-        temp.x = centerX - radiusX / 2;
-        temp.y = centerY - radiusY / 2;
-        temp.z = centerZ + radiusZ / 2;
-        tempVertices.add(temp);
-        temp = new Vector3f();
-        //Titik 7 kanan bawah depan
-        temp.x = centerX + radiusX / 2;
-        temp.y = centerY - radiusY / 2;
-        temp.z = centerZ + radiusZ / 2;
-        tempVertices.add(temp);
-        temp = new Vector3f();
-        //Titik 8 kanan atas depan
-        temp.x = centerX + radiusX / 2;
-        temp.y = centerY + radiusY / 2;
-        temp.z = centerZ + radiusZ / 2;
-        tempVertices.add(temp);
-        temp = new Vector3f();
-
-        //kotak belakang
-        vertices.add(tempVertices.get(0));
-        vertices.add(tempVertices.get(1));
-        vertices.add(tempVertices.get(2));
-
-        vertices.add(tempVertices.get(2));
-        vertices.add(tempVertices.get(3));
-        vertices.add(tempVertices.get(0));
-        //kotak depan
-        vertices.add(tempVertices.get(4));
-        vertices.add(tempVertices.get(5));
-        vertices.add(tempVertices.get(6));
-
-        vertices.add(tempVertices.get(6));
-        vertices.add(tempVertices.get(7));
-        vertices.add(tempVertices.get(4));
-        //kotak samping kiri
-        vertices.add(tempVertices.get(0));
-        vertices.add(tempVertices.get(1));
-        vertices.add(tempVertices.get(4));
-
-        vertices.add(tempVertices.get(1));
-        vertices.add(tempVertices.get(5));
-        vertices.add(tempVertices.get(4));
-        //kotak samping kanan
-        vertices.add(tempVertices.get(7));
-        vertices.add(tempVertices.get(6));
-        vertices.add(tempVertices.get(2));
-
-        vertices.add(tempVertices.get(2));
-        vertices.add(tempVertices.get(3));
-        vertices.add(tempVertices.get(7));
-        //kotak bawah
-        vertices.add(tempVertices.get(1));
-        vertices.add(tempVertices.get(5));
-        vertices.add(tempVertices.get(6));
-
-        vertices.add(tempVertices.get(6));
-        vertices.add(tempVertices.get(2));
-        vertices.add(tempVertices.get(1));
-        //kotak atas
-        vertices.add(tempVertices.get(0));
-        vertices.add(tempVertices.get(4));
-        vertices.add(tempVertices.get(7));
-
-        vertices.add(tempVertices.get(7));
-        vertices.add(tempVertices.get(0));
-        vertices.add(tempVertices.get(3));
-
-        normal = new ArrayList<>(Arrays.asList(
-                //belakang
-                new Vector3f(0.0f, 0.0f, -1.0f),
-                new Vector3f(0.0f, 0.0f, -1.0f),
-                new Vector3f(0.0f, 0.0f, -1.0f),
-                new Vector3f(0.0f, 0.0f, -1.0f),
-                new Vector3f(0.0f, 0.0f, -1.0f),
-                new Vector3f(0.0f, 0.0f, -1.0f),
-                //depan
-                new Vector3f(0.0f, 0.0f, 1.0f),
-                new Vector3f(0.0f, 0.0f, 1.0f),
-                new Vector3f(0.0f, 0.0f, 1.0f),
-                new Vector3f(0.0f, 0.0f, 1.0f),
-                new Vector3f(0.0f, 0.0f, 1.0f),
-                new Vector3f(0.0f, 0.0f, 1.0f),
-                //kiri
-                new Vector3f(-1.0f, 0.0f, 0.0f),
-                new Vector3f(-1.0f, 0.0f, 0.0f),
-                new Vector3f(-1.0f, 0.0f, 0.0f),
-                new Vector3f(-1.0f, 0.0f, 0.0f),
-                new Vector3f(-1.0f, 0.0f, 0.0f),
-                new Vector3f(-1.0f, 0.0f, 0.0f),
-                //kanan
-                new Vector3f(1.0f, 0.0f, 0.0f),
-                new Vector3f(1.0f, 0.0f, 0.0f),
-                new Vector3f(1.0f, 0.0f, 0.0f),
-                new Vector3f(1.0f, 0.0f, 0.0f),
-                new Vector3f(1.0f, 0.0f, 0.0f),
-                new Vector3f(1.0f, 0.0f, 0.0f),
-                //bawah
-                new Vector3f(0.0f, -1.0f, 0.0f),
-                new Vector3f(0.0f, -1.0f, 0.0f),
-                new Vector3f(0.0f, -1.0f, 0.0f),
-                new Vector3f(0.0f, -1.0f, 0.0f),
-                new Vector3f(0.0f, -1.0f, 0.0f),
-                new Vector3f(0.0f, -1.0f, 0.0f),
-                //atas
-                new Vector3f(0.0f, 1.0f, 0.0f),
-                new Vector3f(0.0f, 1.0f, 0.0f),
-                new Vector3f(0.0f, 1.0f, 0.0f),
-                new Vector3f(0.0f, 1.0f, 0.0f),
-                new Vector3f(0.0f, 1.0f, 0.0f),
-                new Vector3f(0.0f, 1.0f, 0.0f)
-        ));
     }
 
     public void setupVAOVBO() {
@@ -274,41 +102,51 @@ public class Sphere extends Object {
         glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0);
 
         // directional light
-        uniformsMap.setUniform("dirLight.direction", new Vector3f(-0.2f, -1.0f, -0.3f));
-        uniformsMap.setUniform("dirLight.ambient", new Vector3f(0.05f, 0.05f, 0.05f));
-        uniformsMap.setUniform("dirLight.diffuse", new Vector3f(0.4f, 0.4f, 0.4f));
-        uniformsMap.setUniform("dirLight.specular", new Vector3f(0.5f, 0.5f, 0.5f));
+        uniformsMap.setUniform("dirLight.direction", new Vector3f(-0.2f,-1.0f,-0.3f));
+        uniformsMap.setUniform("dirLight.ambient", new Vector3f(0.05f,0.05f,0.05f));
+        uniformsMap.setUniform("dirLight.diffuse", new Vector3f(0.4f,0.4f,0.4f));
+        uniformsMap.setUniform("dirLight.specular", new Vector3f(0.5f,0.5f,0.5f));
 
         Vector3f[] _pointLightPositions = {
-                new Vector3f(0.7f, 0.2f, 2.0f),
-                new Vector3f(2.3f, -3.3f, -4.0f),
-                new Vector3f(-4.0f, 2.0f, -12.0f),
-                new Vector3f(0.0f, 0.0f, -3.0f)
+                // ( 4.935E-1  4.140E-2 -4.916E-2)
+                //( 4.764E-1  1.000E-3 -6.294E-2)
+                new Vector3f(0.4764f,0.0334f,-0.06294f),
+                // ( 3.501E-1  4.420E-2  1.829E-1)
+                //( 3.767E-1  1.000E-3  1.790E-1)
+                new Vector3f(0.3767f,0.0334f,0.1790f),
+                // ( 6.036E-2  4.420E-2  1.092E-1)
+                //( 3.424E-1  1.000E-3  5.408E-1)
+                new Vector3f(0.3424f,0.0334f,0.5408f),
+                // (-2.591E-1  4.420E-2  1.106E-1)
+                //( 4.353E-2  3.660E-2  1.151E-1)
+                new Vector3f(0.04353f,0.0334f,0.1151f),
+                // ( 3.251E-1  4.460E-2  5.189E-1)
+                //(-2.313E-1  3.340E-2  1.070E-1)
+                new Vector3f(-0.2313f,0.0334f,0.107f)
         };
-
-        for (int i = 0; i < _pointLightPositions.length; i++) {
-            uniformsMap.setUniform("pointLights[" + i + "].position", _pointLightPositions[i]);
-            uniformsMap.setUniform("pointLights[" + i + "].ambient", new Vector3f(0.05f, 0.05f, 0.05f));
-            uniformsMap.setUniform("pointLights[" + i + "].diffuse", new Vector3f(0.8f, 0.8f, 0.8f));
-            uniformsMap.setUniform("pointLights[" + i + "].specular", new Vector3f(1.0f, 1.0f, 1.0f));
-            uniformsMap.setUniform("pointLights[" + i + "].constant", 1.0f);
-            uniformsMap.setUniform("pointLights[" + i + "].linear", 0.09f);
-            uniformsMap.setUniform("pointLights[" + i + "].quadratic", 0.032f);
+        for (int i=0;i<_pointLightPositions.length;i++){
+            uniformsMap.setUniform("pointLights["+ i +"].position", _pointLightPositions[i]);
+            uniformsMap.setUniform("pointLights["+ i +"].ambient", new Vector3f(0.04f, 0.04f, 0.04f));
+            uniformsMap.setUniform("pointLights["+ i +"].diffuse", new Vector3f(0.5f, 0.5f, 0.5f)); // Adjusted diffuse value
+            uniformsMap.setUniform("pointLights["+ i +"].specular", new Vector3f(0.7f, 0.7f, 0.7f)); // Adjusted specular value
+            uniformsMap.setUniform("pointLights["+ i +"].constant", 0.8f);
+            uniformsMap.setUniform("pointLights["+ i +"].linear", 0.09f);
+            uniformsMap.setUniform("pointLights["+ i +"].quadratic", 0.032f);
         }
 
         // spotlight
-        uniformsMap.setUniform("spotLight.position", camera.getPosition());
-        uniformsMap.setUniform("spotLight.direction", camera.getDirection());
-        uniformsMap.setUniform("spotLight.ambient", new Vector3f(0.0f, 0.0f, 0.0f));
-        uniformsMap.setUniform("spotLight.diffuse", new Vector3f(1.0f, 1.0f, 1.0f));
-        uniformsMap.setUniform("spotLight.specular", new Vector3f(1.0f, 1.0f, 1.0f));
-        uniformsMap.setUniform("spotLight.constant", 1.0f);
-        uniformsMap.setUniform("spotLight.linear", 0.09f);
-        uniformsMap.setUniform("spotLight.quadratic", 0.032f);
-        uniformsMap.setUniform("spotLight.cutOff", (float) Math.cos(Math.toRadians(12.5f)));
-        uniformsMap.setUniform("spotLight.outerCutOff", (float) Math.cos(Math.toRadians(12.5f)));
-        uniformsMap.setUniform("viewPos", camera.getPosition());
-        uniformsMap.setUniform("textureSampler", 0);
+//        uniformsMap.setUniform("spotLight.position", camera.getPosition());
+//        uniformsMap.setUniform("spotLight.direction", camera.getDirection());
+//        uniformsMap.setUniform("spotLight.ambient", new Vector3f(0.0f, 0.0f, 0.0f));
+//        uniformsMap.setUniform("spotLight.diffuse", new Vector3f(1.0f, 1.0f, 1.0f));
+//        uniformsMap.setUniform("spotLight.specular", new Vector3f(1.0f, 1.0f, 1.0f));
+//        uniformsMap.setUniform("spotLight.constant", 1.0f);
+//        uniformsMap.setUniform("spotLight.linear", 0.09f);
+//        uniformsMap.setUniform("spotLight.quadratic", 0.032f);
+//        uniformsMap.setUniform("spotLight.cutOff", (float) Math.cos(Math.toRadians(12.5f)));
+//        uniformsMap.setUniform("spotLight.outerCutOff", (float) Math.cos(Math.toRadians(12.5f)));
+//        uniformsMap.setUniform("viewPos", camera.getPosition());
+//        uniformsMap.setUniform("textureSampler", 0);
 
         // bind texture
         glEnableVertexAttribArray(2);
