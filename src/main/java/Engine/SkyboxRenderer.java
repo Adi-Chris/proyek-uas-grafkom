@@ -1,6 +1,5 @@
 package Engine;
 
-import Texture.TextureData;
 import de.matthiasmann.twl.utils.PNGDecoder;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -14,8 +13,6 @@ import java.util.List;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 public class SkyboxRenderer extends Object {
     private static final float SIZE = 500f;
@@ -100,7 +97,7 @@ public class SkyboxRenderer extends Object {
 
         for (int i=0;i<textureFiles.length;i++){
             TextureData data = decodeTextureFile("E:\\Downloads\\proyek-uas-grafkom\\src\\main\\resources\\res\\" + textureFiles[i] + ".png");
-            GL11.glTexImage2D(GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_X + 1,0, GL11.GL_RGBA, data.getWidth(), data.getHeight(), 0,GL_RGBA, GL11.GL_UNSIGNED_BYTE, data.getBuffer());
+            GL11.glTexImage2D(GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,0, GL11.GL_RGBA, data.getWidth(), data.getHeight(), 0,GL_RGBA, GL11.GL_UNSIGNED_BYTE, data.getBuffer());
         }
         GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
         GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
@@ -111,8 +108,8 @@ public class SkyboxRenderer extends Object {
 
     public void setupVAOVBO() {
         //set vao
-        vao = glGenVertexArrays();
-        glBindVertexArray(vao);
+        vao = GL30.glGenVertexArrays();
+        GL30.glBindVertexArray(vao);
         //set vbo
         vbo = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, vbo);

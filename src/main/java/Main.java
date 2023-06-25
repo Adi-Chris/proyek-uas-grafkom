@@ -18,7 +18,7 @@ public class Main {
     ArrayList<Object> objects = new ArrayList<>();
     Camera camera = new Camera();
     Projection projection = new Projection(window.getWidth(), window.getHeight());
-    private SkyboxRenderer skyboxRenderer;
+    SkyboxRenderer skyboxRenderer;
     Camera thirdPersonCamera = new Camera();
     Camera firstPersonCamera = new Camera();
     int pilihanKamera = 1;
@@ -30,7 +30,7 @@ public class Main {
 //        camera.setPosition(0.0f,  0.0f, 0.5f);
         camera.setPosition(0.0f, 0.1f, 0.006f);
         camera.setRotation((float) Math.toRadians(90.0f), (float) Math.toRadians(0.0f));
-        skyboxRenderer = new SkyboxRenderer(
+        this.skyboxRenderer = new SkyboxRenderer(
                 Arrays.asList(
                         new ShaderProgram.ShaderModuleData(
                                 "resources/shaders/skyboxVertexShader.vert"
@@ -40,7 +40,7 @@ public class Main {
                                 , GL_FRAGMENT_SHADER)
                 ),
                 new ArrayList<>(),
-                new Vector4f()
+                new Vector4f(0.0f,1.0f,0.0f,1.0f)
         );
         camera.setPosition(0.04f, 0.45f, 0.055f);
         camera.setRotation((float) Math.toRadians(90.0f), (float) Math.toRadians(0.0f));
