@@ -126,10 +126,10 @@ public class Sphere extends Object {
         };
         for (int i=0;i<_pointLightPositions.length;i++){
             uniformsMap.setUniform("pointLights["+ i +"].position", _pointLightPositions[i]);
-            uniformsMap.setUniform("pointLights["+ i +"].ambient", new Vector3f(0.03f, 0.03f, 0.03f));
-            uniformsMap.setUniform("pointLights["+ i +"].diffuse", new Vector3f(0.3f, 0.3f, 0.3f));
-            uniformsMap.setUniform("pointLights["+ i +"].specular", new Vector3f(0.5f, 0.5f, 0.5f));
-            uniformsMap.setUniform("pointLights["+ i +"].constant", 0.8f);
+            uniformsMap.setUniform("pointLights["+ i +"].ambient", new Vector3f(0.05f,0.05f,0.05f));
+            uniformsMap.setUniform("pointLights["+ i +"].diffuse", new Vector3f(0.8f,0.8f,0.8f));
+            uniformsMap.setUniform("pointLights["+ i +"].specular", new Vector3f(1.0f,1.0f,1.0f));
+            uniformsMap.setUniform("pointLights["+ i +"].constant",1.0f );
             uniformsMap.setUniform("pointLights["+ i +"].linear", 0.09f);
             uniformsMap.setUniform("pointLights["+ i +"].quadratic", 0.032f);
         }
