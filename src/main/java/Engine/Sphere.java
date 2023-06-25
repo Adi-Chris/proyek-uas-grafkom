@@ -77,154 +77,6 @@ public class Sphere extends Object {
         glDrawElements(GL_TRIANGLES, index.size(), GL_UNSIGNED_INT, 0);
     }
 
-    public void createBox() {
-        vertices.clear();
-        Vector3f temp = new Vector3f();
-        ArrayList<Vector3f> tempVertices = new ArrayList<>();
-        //Titik 1 kiri atas belakang
-        temp.x = centerX - radiusX / 2;
-        temp.y = centerY + radiusY / 2;
-        temp.z = centerZ - radiusZ / 2;
-        tempVertices.add(temp);
-        temp = new Vector3f();
-        //Titik 2 kiri bawah belakang
-        temp.x = centerX - radiusX / 2;
-        temp.y = centerY - radiusY / 2;
-        temp.z = centerZ - radiusZ / 2;
-        tempVertices.add(temp);
-        temp = new Vector3f();
-        //Titik 3 kanan bawah belakang
-        temp.x = centerX + radiusX / 2;
-        temp.y = centerY - radiusY / 2;
-        temp.z = centerZ - radiusZ / 2;
-        tempVertices.add(temp);
-        temp = new Vector3f();
-        //Titik 4 kanan atas belakang
-        temp.x = centerX + radiusX / 2;
-        temp.y = centerY + radiusY / 2;
-        temp.z = centerZ - radiusZ / 2;
-        tempVertices.add(temp);
-        temp = new Vector3f();
-        //Titik 5 kiri atas depan
-        temp.x = centerX - radiusX / 2;
-        temp.y = centerY + radiusY / 2;
-        temp.z = centerZ + radiusZ / 2;
-        tempVertices.add(temp);
-        temp = new Vector3f();
-        //Titik 6 kiri bawah depan
-        temp.x = centerX - radiusX / 2;
-        temp.y = centerY - radiusY / 2;
-        temp.z = centerZ + radiusZ / 2;
-        tempVertices.add(temp);
-        temp = new Vector3f();
-        //Titik 7 kanan bawah depan
-        temp.x = centerX + radiusX / 2;
-        temp.y = centerY - radiusY / 2;
-        temp.z = centerZ + radiusZ / 2;
-        tempVertices.add(temp);
-        temp = new Vector3f();
-        //Titik 8 kanan atas depan
-        temp.x = centerX + radiusX / 2;
-        temp.y = centerY + radiusY / 2;
-        temp.z = centerZ + radiusZ / 2;
-        tempVertices.add(temp);
-        temp = new Vector3f();
-
-        //kotak belakang
-        vertices.add(tempVertices.get(0));
-        vertices.add(tempVertices.get(1));
-        vertices.add(tempVertices.get(2));
-
-        vertices.add(tempVertices.get(2));
-        vertices.add(tempVertices.get(3));
-        vertices.add(tempVertices.get(0));
-        //kotak depan
-        vertices.add(tempVertices.get(4));
-        vertices.add(tempVertices.get(5));
-        vertices.add(tempVertices.get(6));
-
-        vertices.add(tempVertices.get(6));
-        vertices.add(tempVertices.get(7));
-        vertices.add(tempVertices.get(4));
-        //kotak samping kiri
-        vertices.add(tempVertices.get(0));
-        vertices.add(tempVertices.get(1));
-        vertices.add(tempVertices.get(4));
-
-        vertices.add(tempVertices.get(1));
-        vertices.add(tempVertices.get(5));
-        vertices.add(tempVertices.get(4));
-        //kotak samping kanan
-        vertices.add(tempVertices.get(7));
-        vertices.add(tempVertices.get(6));
-        vertices.add(tempVertices.get(2));
-
-        vertices.add(tempVertices.get(2));
-        vertices.add(tempVertices.get(3));
-        vertices.add(tempVertices.get(7));
-        //kotak bawah
-        vertices.add(tempVertices.get(1));
-        vertices.add(tempVertices.get(5));
-        vertices.add(tempVertices.get(6));
-
-        vertices.add(tempVertices.get(6));
-        vertices.add(tempVertices.get(2));
-        vertices.add(tempVertices.get(1));
-        //kotak atas
-        vertices.add(tempVertices.get(0));
-        vertices.add(tempVertices.get(4));
-        vertices.add(tempVertices.get(7));
-
-        vertices.add(tempVertices.get(7));
-        vertices.add(tempVertices.get(0));
-        vertices.add(tempVertices.get(3));
-
-        normal = new ArrayList<>(Arrays.asList(
-                //belakang
-                new Vector3f(0.0f, 0.0f, -1.0f),
-                new Vector3f(0.0f, 0.0f, -1.0f),
-                new Vector3f(0.0f, 0.0f, -1.0f),
-                new Vector3f(0.0f, 0.0f, -1.0f),
-                new Vector3f(0.0f, 0.0f, -1.0f),
-                new Vector3f(0.0f, 0.0f, -1.0f),
-                //depan
-                new Vector3f(0.0f, 0.0f, 1.0f),
-                new Vector3f(0.0f, 0.0f, 1.0f),
-                new Vector3f(0.0f, 0.0f, 1.0f),
-                new Vector3f(0.0f, 0.0f, 1.0f),
-                new Vector3f(0.0f, 0.0f, 1.0f),
-                new Vector3f(0.0f, 0.0f, 1.0f),
-                //kiri
-                new Vector3f(-1.0f, 0.0f, 0.0f),
-                new Vector3f(-1.0f, 0.0f, 0.0f),
-                new Vector3f(-1.0f, 0.0f, 0.0f),
-                new Vector3f(-1.0f, 0.0f, 0.0f),
-                new Vector3f(-1.0f, 0.0f, 0.0f),
-                new Vector3f(-1.0f, 0.0f, 0.0f),
-                //kanan
-                new Vector3f(1.0f, 0.0f, 0.0f),
-                new Vector3f(1.0f, 0.0f, 0.0f),
-                new Vector3f(1.0f, 0.0f, 0.0f),
-                new Vector3f(1.0f, 0.0f, 0.0f),
-                new Vector3f(1.0f, 0.0f, 0.0f),
-                new Vector3f(1.0f, 0.0f, 0.0f),
-                //bawah
-                new Vector3f(0.0f, -1.0f, 0.0f),
-                new Vector3f(0.0f, -1.0f, 0.0f),
-                new Vector3f(0.0f, -1.0f, 0.0f),
-                new Vector3f(0.0f, -1.0f, 0.0f),
-                new Vector3f(0.0f, -1.0f, 0.0f),
-                new Vector3f(0.0f, -1.0f, 0.0f),
-                //atas
-                new Vector3f(0.0f, 1.0f, 0.0f),
-                new Vector3f(0.0f, 1.0f, 0.0f),
-                new Vector3f(0.0f, 1.0f, 0.0f),
-                new Vector3f(0.0f, 1.0f, 0.0f),
-                new Vector3f(0.0f, 1.0f, 0.0f),
-                new Vector3f(0.0f, 1.0f, 0.0f)
-        ));
-    }
-
     public void setupVAOVBO() {
         super.setupVAOVBO();
 
@@ -256,24 +108,23 @@ public class Sphere extends Object {
         uniformsMap.setUniform("dirLight.specular", new Vector3f(0.5f,0.5f,0.5f));
 
         Vector3f[] _pointLightPositions = {
-                //( 2.121E-1  1.420E-2 -2.272E-2)
-                new Vector3f(0.2121f,0.0142f,-0.02272f),
-                //( 1.651E-1  1.260E-2  7.599E-2)
-                //( 1.815E-1  1.420E-2  7.158E-2)
-                new Vector3f(0.1815f,0.0142f,0.07559f),
-                //( 1.644E-1  1.420E-2  2.149E-1)
-                new Vector3f(0.1644f,0.0142f,0.2149f),
-                //( 4.754E-2  1.420E-2  5.053E-2)
-                new Vector3f(0.04754f,0.0142f,0.05053f),
-                //(-6.057E-2  1.420E-2  4.800E-2)
-                new Vector3f(-0.06057f,0.0142f,0.048f)
+                //( 4.576E-1  3.660E-2 -6.199E-2)
+                new Vector3f(0.4576f,0.0366f,-0.06199f),
+                // ( 3.868E-1  3.940E-2  1.792E-1)
+                new Vector3f(0.3868f,0.0394f,0.1792f),
+                // ( 3.462E-1  3.980E-2  5.086E-1)
+                new Vector3f(0.3462f,0.0398f,0.5086f),
+                // ( 4.462E-2  3.740E-2  1.153E-1)
+                new Vector3f(0.04462f,0.0374f,0.1153f),
+                //(-2.373E-1  3.380E-2  1.074E-1)
+                new Vector3f(-0.2373f,0.0338f,0.1074f)
         };
         for (int i=0;i<_pointLightPositions.length;i++){
             uniformsMap.setUniform("pointLights["+ i +"].position", _pointLightPositions[i]);
-            uniformsMap.setUniform("pointLights["+ i +"].ambient", new Vector3f(0.05f,0.05f,0.05f));
-            uniformsMap.setUniform("pointLights["+ i +"].diffuse", new Vector3f(0.8f,0.8f,0.8f));
-            uniformsMap.setUniform("pointLights["+ i +"].specular", new Vector3f(1.0f,1.0f,1.0f));
-            uniformsMap.setUniform("pointLights["+ i +"].constant",1.0f );
+            uniformsMap.setUniform("pointLights["+ i +"].ambient", new Vector3f(0.03f, 0.03f, 0.03f));
+            uniformsMap.setUniform("pointLights["+ i +"].diffuse", new Vector3f(0.3f, 0.3f, 0.3f));
+            uniformsMap.setUniform("pointLights["+ i +"].specular", new Vector3f(0.5f, 0.5f, 0.5f));
+            uniformsMap.setUniform("pointLights["+ i +"].constant", 0.8f);
             uniformsMap.setUniform("pointLights["+ i +"].linear", 0.09f);
             uniformsMap.setUniform("pointLights["+ i +"].quadratic", 0.032f);
         }
