@@ -156,11 +156,11 @@ public class Main {
             }
             if (window.isKeyPressed(GLFW_KEY_T)) {
                 camera.moveForward(move);
-                System.out.println(camera.getPosition());
+//                System.out.println(camera.getPosition());
             }
             if (window.isKeyPressed(GLFW_KEY_G)) {
                 camera.moveBackwards(move);
-                System.out.println(camera.getPosition());
+//                System.out.println(camera.getPosition());
             }
             if (window.isKeyPressed(GLFW_KEY_UP)) {
                 camera.moveUp(moveThirdPerson / 2);
@@ -177,12 +177,12 @@ public class Main {
             if (window.getMouseInput().isLeftButtonPressed()) {
                 Vector2f displayVector = window.getMouseInput().getDisplVec();
                 camera.addRotation((float) Math.toRadians(displayVector.x * 0.1f), (float) Math.toRadians(displayVector.y * 0.1f));
-                System.out.println(camera.getPosition());
+//                System.out.println(camera.getPosition());
             }
             if (window.getMouseInput().getScroll().y != 0) {
                 projection.setFOV(projection.getFOV() - (window.getMouseInput().getScroll().y * 0.01f));
                 window.getMouseInput().setScroll(new Vector2f());
-                System.out.println(camera.getPosition());
+//                System.out.println(camera.getPosition());
             }
         }
 
@@ -263,6 +263,8 @@ public class Main {
             GL.createCapabilities();
             input();
 
+            skyboxRenderer.draw(camera, projection);
+
             if (pilihanKamera == 1) {
                 for (Object object : objects) {
                     object.draw(camera, projection);
@@ -276,8 +278,6 @@ public class Main {
                     object.draw(firstPersonCamera, projection);
                 }
             }
-
-            skyboxRenderer.draw(camera, projection);
 
             glDisableVertexAttribArray(0);
             glfwPollEvents();
