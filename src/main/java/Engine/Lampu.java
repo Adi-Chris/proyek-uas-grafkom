@@ -151,6 +151,8 @@ public class Lampu extends Object {
 //        uniformsMap.setUniform("spotLight.outerCutOff", (float) Math.cos(Math.toRadians(12.5f)));
 //        uniformsMap.setUniform("viewPos", camera.getPosition());
 //        uniformsMap.setUniform("textureSampler", 0);
+        // color
+        uniformsMap.setUniform("Lampu", new Vector3f(1.0f,0.0f,0.0f));
 
         // bind texture
         glEnableVertexAttribArray(2);
