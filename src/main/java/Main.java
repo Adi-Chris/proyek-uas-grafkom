@@ -1,9 +1,8 @@
 import Engine.*;
 import Engine.Object;
-import org.joml.Vector2f;
-import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL30;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +14,7 @@ import static org.lwjgl.opengl.GL30.*;
 
 public class Main {
     private Window window = new Window(1000, 1000, "Window");
-    ArrayList<Object> objects = new ArrayList<>();
+    ArrayList<Sphere> objects = new ArrayList<>();
     ArrayList<Lampu> lampu = new ArrayList<>();
     Camera camera = new Camera();
     Projection projection = new Projection(window.getWidth(), window.getHeight());
@@ -27,6 +26,11 @@ public class Main {
     public void init() {
         window.init();
         GL.createCapabilities();
+
+        // Cull
+        GL30.glCullFace(GL30.GL_CULL_FACE);
+        GL30.glCullFace(GL_BACK);
+
         thirdPersonCamera.addRotation((float) Math.toRadians(0.0f), (float) Math.toRadians(90.0f));
         firstPersonCamera.addRotation((float) Math.toRadians(0.0f), (float) Math.toRadians(90.0f));
         skyboxRenderer = new SkyboxRenderer(
@@ -62,7 +66,7 @@ public class Main {
                 0.125f,
                 0.125f,
                 0.125f,
-                "/models/sirkuitfinalrilcuy2.obj", "E:\\Downloads\\proyek-uas-grafkom\\src\\main\\resources\\textures\\texture.png"
+                "/models/sirkuitfinalrilcuy2.obj", "C:\\Users\\ASUS ROG\\Projects\\grafkom\\proyek-uas-grafkom\\src\\main\\resources\\textures\\texture.png"
 
         ));
         objects.get(0).scaleObject(0.25f, 0.25f, 0.25f);
@@ -85,11 +89,11 @@ public class Main {
                 0.125f,
                 0.125f,
                 0.125f,
-                "/models/supra2.obj", "E:\\Downloads\\proyek-uas-grafkom\\src\\main\\resources\\textures\\texture2.png"
+                "/models/supra2.obj", "C:\\Users\\ASUS ROG\\Projects\\grafkom\\proyek-uas-grafkom\\src\\main\\resources\\textures\\texture2.png"
         ));
         objects.get(1).scaleObject(0.0005f, 0.0005f, 0.0005f);
         objects.get(1).rotateObject((float) (Math.toRadians(90f)), 0f, 1f, 0f);
-        objects.get(1).translateObject(0.012f, 0.001f, -0.005f);
+        objects.get(1).translateObject(0.0f, 0.001f, -0.001f);
 
         // mobil biru
         objects.add(new Sphere(
@@ -109,7 +113,7 @@ public class Main {
                 0.125f,
                 0.125f,
                 0.125f,
-                "/models/supra3.obj","E:\\Downloads\\proyek-uas-grafkom\\src\\main\\resources\\textures\\texture3.png"
+                "/models/supra3.obj","C:\\Users\\ASUS ROG\\Projects\\grafkom\\proyek-uas-grafkom\\src\\main\\resources\\textures\\texture3.png"
         ));
         objects.get(2).scaleObject(0.0005f, 0.0005f, 0.0005f);
         objects.get(2).rotateObject((float) (Math.toRadians(90f)), 0f, 1f, 0f);
@@ -132,13 +136,18 @@ public class Main {
                 0.125f,
                 0.125f,
                 0.125f,
-                "/models/tiangonly.obj","E:\\Downloads\\proyek-uas-grafkom\\src\\main\\resources\\textures\\texture3.png"
+                "/models/tiangonly.obj","C:\\Users\\ASUS ROG\\Projects\\grafkom\\proyek-uas-grafkom\\src\\main\\resources\\textures\\texture3.png"
         ));
         lampu.get(0).scaleObject(0.25f,0.25f,0.25f);
         lampu.get(0).translateObject(0.125f,0.0f,-0.01f);
     }
 
     public void input() {
+//        Debug Position
+        if (window.isKeyPressed(GLFW_KEY_P)) {
+            System.out.println("Coord: " + objects.get(1).updateCenterPoint());
+        }
+
         float move = 0.001f;
 
         if (window.isKeyPressed(GLFW_KEY_1) && pilihanKamera != 1) {
@@ -151,7 +160,7 @@ public class Main {
             float z2 = objects.get(2).updateCenterPoint().z;
             thirdPersonCamera.setPosition(x2, y2, z2);
             thirdPersonCamera.moveBackwards(0.02f);
-            thirdPersonCamera.moveUp(0.006f);
+            thirdPersonCamera.moveUp(0.0056f);
         }
         if (window.isKeyPressed(GLFW_KEY_3) && pilihanKamera != 3) {
             pilihanKamera = 3;
@@ -159,25 +168,42 @@ public class Main {
             float y2 = objects.get(2).updateCenterPoint().y;
             float z2 = objects.get(2).updateCenterPoint().z;
             firstPersonCamera.setPosition(x2, y2, z2);
-            firstPersonCamera.moveUp(0.006f);
+            firstPersonCamera.moveUp(0.0056f);
         }
 
         if (pilihanKamera == 1) {
             if (window.isKeyPressed(GLFW_KEY_W)) {
                 objects.get(1).translateObject(0.0f, 0.0f, -move);
-                objects.get(2).translateObject(0.0f, 0.0f, -move);
+//                objects.get(2).translateObject(0.0f, 0.0f, -move);
+
+                AABB aabb = new AABB(objects.get(1).boundingBox.getMin(), objects.get(1).boundingBox.getMax());
+                ArrayList<AABB> aabbList = new ArrayList<>();
+                aabbList.add(aabb);
+                objects.get(2).translateObject2(0.0f, 0.0f, -move, aabbList);
             }
             if (window.isKeyPressed(GLFW_KEY_A)) {
                 objects.get(1).translateObject(-move, 0.0f, 0.0f);
-                objects.get(2).translateObject(-move, 0.0f, 0.0f);
+//                objects.get(2).translateObject(-move, 0.0f, 0.0f);
+                AABB aabb = new AABB(objects.get(1).boundingBox.getMin(), objects.get(1).boundingBox.getMax());
+                ArrayList<AABB> aabbList = new ArrayList<>();
+                aabbList.add(aabb);
+                objects.get(2).translateObject2(-move, 0.0f, 0.0f, aabbList);
             }
             if (window.isKeyPressed(GLFW_KEY_S)) {
                 objects.get(1).translateObject(0.0f, 0.0f, move);
-                objects.get(2).translateObject(0.0f, 0.0f, move);
+//                objects.get(2).translateObject(0.0f, 0.0f, move);
+                AABB aabb = new AABB(objects.get(1).boundingBox.getMin(), objects.get(1).boundingBox.getMax());
+                ArrayList<AABB> aabbList = new ArrayList<>();
+                aabbList.add(aabb);
+                objects.get(2).translateObject2(0.0f, 0.0f, move, aabbList);
             }
             if (window.isKeyPressed(GLFW_KEY_D)) {
                 objects.get(1).translateObject(move, 0.0f, 0.0f);
-                objects.get(2).translateObject(move, 0.0f, 0.0f);
+//                objects.get(2).translateObject(move, 0.0f, 0.0f);
+                AABB aabb = new AABB(objects.get(1).boundingBox.getMin(), objects.get(1).boundingBox.getMax());
+                ArrayList<AABB> aabbList = new ArrayList<>();
+                aabbList.add(aabb);
+                objects.get(2).translateObject2(move, 0.0f, 0.0f, aabbList);
             }
             if (window.isKeyPressed(GLFW_KEY_T)) {
                 camera.moveForward(move);
@@ -207,17 +233,26 @@ public class Main {
                 objects.get(1).translateObject(-x, -y, -z);
                 objects.get(1).rotateObject((float) Math.toRadians(1.5), 0.0f, 1f, 0.0f);
                 objects.get(1).translateObject(x, y, z);
-                objects.get(2).translateObject(-x2, -y2, -z2);
-                objects.get(2).rotateObject((float) Math.toRadians(1.5), 0.0f, 1f, 0.0f);
-                objects.get(2).translateObject(x2, y2, z2);
-                count--;
+//                objects.get(2).translateObject(-x2, -y2, -z2);
+//                objects.get(2).rotateObject((float) Math.toRadians(1.5), 0.0f, 1f, 0.0f);
+//                objects.get(2).translateObject(x2, y2, z2);
+                    boolean colliding;
+                    AABB aabb = new AABB(objects.get(1).boundingBox.getMin(), objects.get(1).boundingBox.getMax());
+                    ArrayList<AABB> aabbList = new ArrayList<>();
+                    aabbList.add(aabb);
+                colliding = objects.get(2).rotateObjectCheckCollision((float) Math.toRadians(1.5), 0.0f, 1f, 0.0f, aabbList);
+
+                if (!colliding) {
+                    count--;
+                }
+//                count--;
                 thirdPersonCamera.setPosition(x2, y2, z2);
                 thirdPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
                 thirdPersonCamera.moveBackwards(0.02f);
-                thirdPersonCamera.moveUp(0.006f);
+                thirdPersonCamera.moveUp(0.0056f);
                 firstPersonCamera.setPosition(x2, y2, z2);
                 firstPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
-                firstPersonCamera.moveUp(0.006f);
+                firstPersonCamera.moveUp(0.0056f);
             }
             if (window.isKeyPressed(GLFW_KEY_RIGHT)) {
                 float x = objects.get(1).updateCenterPoint().x;
@@ -229,17 +264,26 @@ public class Main {
                 objects.get(1).translateObject(-x, -y, -z);
                 objects.get(1).rotateObject((float) Math.toRadians(1.5), 0.0f, -1f, 0.0f);
                 objects.get(1).translateObject(x, y, z);
-                objects.get(2).translateObject(-x2, -y2, -z2);
-                objects.get(2).rotateObject((float) Math.toRadians(1.5), 0.0f, -1f, 0.0f);
-                objects.get(2).translateObject(x2, y2, z2);
-                count++;
+//                objects.get(2).translateObject(-x2, -y2, -z2);
+//                objects.get(2).rotateObject((float) Math.toRadians(1.5), 0.0f, -1f, 0.0f);
+//                objects.get(2).translateObject(x2, y2, z2);
+//                count++;
+                    boolean colliding;
+                    AABB aabb = new AABB(objects.get(1).boundingBox.getMin(), objects.get(1).boundingBox.getMax());
+                    ArrayList<AABB> aabbList = new ArrayList<>();
+                    aabbList.add(aabb);
+                    colliding = objects.get(2).rotateObjectCheckCollision((float) Math.toRadians(1.5), 0.0f, -1f, 0.0f, aabbList);
+
+                    if (!colliding) {
+                        count++;
+                    }
                 thirdPersonCamera.setPosition(x2, y2, z2);
                 thirdPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
                 thirdPersonCamera.moveBackwards(0.02f);
-                thirdPersonCamera.moveUp(0.006f);
+                thirdPersonCamera.moveUp(0.0056f);
                 firstPersonCamera.setPosition(x2, y2, z2);
                 firstPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
-                firstPersonCamera.moveUp(0.006f);
+                firstPersonCamera.moveUp(0.0056f);
             }
 //            if (window.getMouseInput().isLeftButtonPressed()) {
 //                Vector2f displayVector = window.getMouseInput().getDisplVec();
@@ -257,11 +301,15 @@ public class Main {
                 float y2 = objects.get(2).updateCenterPoint().y;
                 float z2 = objects.get(2).updateCenterPoint().z;
                 objects.get(1).moveForward(1f);
-                objects.get(2).moveForward(1f);
+//                objects.get(2).moveForward(1f);
+                    AABB aabb = new AABB(objects.get(1).boundingBox.getMin(), objects.get(1).boundingBox.getMax());
+                    ArrayList<AABB> aabbList = new ArrayList<>();
+                    aabbList.add(aabb);
+                    objects.get(2).moveForwardCheckCollision(1, aabbList);
                 thirdPersonCamera.setPosition(x2, y2, z2);
                 thirdPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
                 thirdPersonCamera.moveBackwards(0.02f);
-                thirdPersonCamera.moveUp(0.006f);
+                thirdPersonCamera.moveUp(0.0056f);
             }
             if (window.isKeyPressed(GLFW_KEY_A)) {
                 float x = objects.get(1).updateCenterPoint().x;
@@ -273,28 +321,40 @@ public class Main {
                 objects.get(1).translateObject(-x, -y, -z);
                 objects.get(1).rotateObject((float) Math.toRadians(1.5), 0.0f, 1f, 0.0f);
                 objects.get(1).translateObject(x, y, z);
-                objects.get(2).translateObject(-x2, -y2, -z2);
-                objects.get(2).rotateObject((float) Math.toRadians(1.5), 0.0f, 1f, 0.0f);
-                objects.get(2).translateObject(x2, y2, z2);
-                count--;
+//                objects.get(2).translateObject(-x2, -y2, -z2);
+                    boolean colliding;
+                    AABB aabb = new AABB(objects.get(1).boundingBox.getMin(), objects.get(1).boundingBox.getMax());
+                    ArrayList<AABB> aabbList = new ArrayList<>();
+                    aabbList.add(aabb);
+//                    objects.get(2).rotateObject2((float) Math.toRadians(1.5), 0.0f, 1f, 0.0f, aabbList);
+                    colliding = objects.get(2).rotateObjectCheckCollision((float) Math.toRadians(1.5), 0.0f, 1f, 0.0f, aabbList);
+//                objects.get(2).rotateObject((float) Math.toRadians(1.5), 0.0f, 1f, 0.0f);
+//                objects.get(2).translateObject(x2, y2, z2);
+                if (!colliding) {
+                    count--;
+                }
                 thirdPersonCamera.setPosition(x2, y2, z2);
                 thirdPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
                 thirdPersonCamera.moveBackwards(0.02f);
-                thirdPersonCamera.moveUp(0.006f);
+                thirdPersonCamera.moveUp(0.0056f);
                 firstPersonCamera.setPosition(x2, y2, z2);
                 firstPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
-                firstPersonCamera.moveUp(0.006f);
+                firstPersonCamera.moveUp(0.0056f);
             }
             if (window.isKeyPressed(GLFW_KEY_S)) {
                 float x2 = objects.get(2).updateCenterPoint().x;
                 float y2 = objects.get(2).updateCenterPoint().y;
                 float z2 = objects.get(2).updateCenterPoint().z;
                 objects.get(1).moveBackward(1f);
-                objects.get(2).moveBackward(1f);
+//                objects.get(2).moveBackward(1f);
+                    AABB aabb = new AABB(objects.get(1).boundingBox.getMin(), objects.get(1).boundingBox.getMax());
+                    ArrayList<AABB> aabbList = new ArrayList<>();
+                    aabbList.add(aabb);
+                    objects.get(2).moveBackwardCheckCollision(1, aabbList);
                 thirdPersonCamera.setPosition(x2, y2, z2);
                 thirdPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
                 thirdPersonCamera.moveBackwards(0.02f);
-                thirdPersonCamera.moveUp(0.006f);
+                thirdPersonCamera.moveUp(0.0056f);
             }
             if (window.isKeyPressed(GLFW_KEY_D)) {
                 float x = objects.get(1).updateCenterPoint().x;
@@ -306,17 +366,26 @@ public class Main {
                 objects.get(1).translateObject(-x, -y, -z);
                 objects.get(1).rotateObject((float) Math.toRadians(1.5), 0.0f, -1f, 0.0f);
                 objects.get(1).translateObject(x, y, z);
-                objects.get(2).translateObject(-x2, -y2, -z2);
-                objects.get(2).rotateObject((float) Math.toRadians(1.5), 0.0f, -1f, 0.0f);
-                objects.get(2).translateObject(x2, y2, z2);
-                count++;
+//                objects.get(2).translateObject(-x2, -y2, -z2);
+                    boolean colliding;
+                    AABB aabb = new AABB(objects.get(1).boundingBox.getMin(), objects.get(1).boundingBox.getMax());
+                    ArrayList<AABB> aabbList = new ArrayList<>();
+                    aabbList.add(aabb);
+//                    objects.get(2).rotateObject2((float) Math.toRadians(1.5), 0.0f, -1f, 0.0f, aabbList);
+                    colliding = objects.get(2).rotateObjectCheckCollision((float) Math.toRadians(1.5), 0.0f, -1f, 0.0f, aabbList);
+//                objects.get(2).rotateObject((float) Math.toRadians(1.5), 0.0f, -1f, 0.0f);
+//                objects.get(2).translateObject(x2, y2, z2);
+                    if (!colliding) {
+                        count++;
+                    }
+
                 thirdPersonCamera.setPosition(x2, y2, z2);
                 thirdPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
                 thirdPersonCamera.moveBackwards(0.02f);
-                thirdPersonCamera.moveUp(0.006f);
+                thirdPersonCamera.moveUp(0.0056f);
                 firstPersonCamera.setPosition(x2, y2, z2);
                 firstPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
-                firstPersonCamera.moveUp(0.006f);
+                firstPersonCamera.moveUp(0.0056f);
             }
             if (window.isKeyPressed(GLFW_KEY_UP)) {
                 float x2 = objects.get(2).updateCenterPoint().x;
@@ -327,7 +396,7 @@ public class Main {
                 thirdPersonCamera.setPosition(x2, y2, z2);
                 thirdPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
                 thirdPersonCamera.moveBackwards(0.02f);
-                thirdPersonCamera.moveUp(0.006f);
+                thirdPersonCamera.moveUp(0.0056f);
             }
             if (window.isKeyPressed(GLFW_KEY_DOWN)) {
                 float x2 = objects.get(2).updateCenterPoint().x;
@@ -338,7 +407,7 @@ public class Main {
                 thirdPersonCamera.setPosition(x2, y2, z2);
                 thirdPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
                 thirdPersonCamera.moveBackwards(0.02f);
-                thirdPersonCamera.moveUp(0.006f);
+                thirdPersonCamera.moveUp(0.0056f);
             }
         }
 
@@ -348,10 +417,14 @@ public class Main {
                 float y2 = objects.get(2).updateCenterPoint().y;
                 float z2 = objects.get(2).updateCenterPoint().z;
                 objects.get(1).moveForward(1f);
-                objects.get(2).moveForward(1f);
+//                objects.get(2).moveForward(1f);
+                    AABB aabb = new AABB(objects.get(1).boundingBox.getMin(), objects.get(1).boundingBox.getMax());
+                    ArrayList<AABB> aabbList = new ArrayList<>();
+                    aabbList.add(aabb);
+                    objects.get(2).moveForwardCheckCollision(1, aabbList);
                 firstPersonCamera.setPosition(x2, y2, z2);
                 firstPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
-                firstPersonCamera.moveUp(0.006f);
+                firstPersonCamera.moveUp(0.0056f);
             }
             if (window.isKeyPressed(GLFW_KEY_A)) {
                 float x = objects.get(1).updateCenterPoint().x;
@@ -363,27 +436,39 @@ public class Main {
                 objects.get(1).translateObject(-x, -y, -z);
                 objects.get(1).rotateObject((float) Math.toRadians(1.5), 0.0f, 1f, 0.0f);
                 objects.get(1).translateObject(x, y, z);
-                objects.get(2).translateObject(-x2, -y2, -z2);
-                objects.get(2).rotateObject((float) Math.toRadians(1.5), 0.0f, 1f, 0.0f);
-                objects.get(2).translateObject(x2, y2, z2);
-                count--;
+//                objects.get(2).translateObject(-x2, -y2, -z2);
+//                objects.get(2).rotateObject((float) Math.toRadians(1.5), 0.0f, 1f, 0.0f);
+//                objects.get(2).translateObject(x2, y2, z2);
+//                count--;
+                    boolean colliding;
+                    AABB aabb = new AABB(objects.get(1).boundingBox.getMin(), objects.get(1).boundingBox.getMax());
+                    ArrayList<AABB> aabbList = new ArrayList<>();
+                    aabbList.add(aabb);
+                    colliding = objects.get(2).rotateObjectCheckCollision((float) Math.toRadians(1.5), 0.0f, 1f, 0.0f, aabbList);
+                    if (!colliding) {
+                        count--;
+                    }
                 firstPersonCamera.setPosition(x2, y2, z2);
                 firstPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
-                firstPersonCamera.moveUp(0.006f);
+                firstPersonCamera.moveUp(0.0056f);
                 thirdPersonCamera.setPosition(x2, y2, z2);
                 thirdPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
                 thirdPersonCamera.moveBackwards(0.02f);
-                thirdPersonCamera.moveUp(0.006f);
+                thirdPersonCamera.moveUp(0.0056f);
             }
             if (window.isKeyPressed(GLFW_KEY_S)) {
                 float x2 = objects.get(2).updateCenterPoint().x;
                 float y2 = objects.get(2).updateCenterPoint().y;
                 float z2 = objects.get(2).updateCenterPoint().z;
                 objects.get(1).moveBackward(1f);
-                objects.get(2).moveBackward(1f);
+//                objects.get(2).moveBackward(1f);
+                    AABB aabb = new AABB(objects.get(1).boundingBox.getMin(), objects.get(1).boundingBox.getMax());
+                    ArrayList<AABB> aabbList = new ArrayList<>();
+                    aabbList.add(aabb);
+                    objects.get(2).moveBackwardCheckCollision(1, aabbList);
                 firstPersonCamera.setPosition(x2, y2, z2);
                 firstPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
-                firstPersonCamera.moveUp(0.006f);
+                firstPersonCamera.moveUp(0.0056f);
             }
             if (window.isKeyPressed(GLFW_KEY_D)) {
                 float x = objects.get(1).updateCenterPoint().x;
@@ -395,17 +480,25 @@ public class Main {
                 objects.get(1).translateObject(-x, -y, -z);
                 objects.get(1).rotateObject((float) Math.toRadians(1.5), 0.0f, -1f, 0.0f);
                 objects.get(1).translateObject(x, y, z);
-                objects.get(2).translateObject(-x2, -y2, -z2);
-                objects.get(2).rotateObject((float) Math.toRadians(1.5), 0.0f, -1f, 0.0f);
-                objects.get(2).translateObject(x2, y2, z2);
-                count++;
+//                objects.get(2).translateObject(-x2, -y2, -z2);
+//                objects.get(2).rotateObject((float) Math.toRadians(1.5), 0.0f, -1f, 0.0f);
+//                objects.get(2).translateObject(x2, y2, z2);
+//                count++;
+                    boolean colliding;
+                    AABB aabb = new AABB(objects.get(1).boundingBox.getMin(), objects.get(1).boundingBox.getMax());
+                    ArrayList<AABB> aabbList = new ArrayList<>();
+                    aabbList.add(aabb);
+                    colliding = objects.get(2).rotateObjectCheckCollision((float) Math.toRadians(1.5), 0.0f, -1f, 0.0f, aabbList);
+                    if (!colliding) {
+                        count++;
+                    }
                 firstPersonCamera.setPosition(x2, y2, z2);
                 firstPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
-                firstPersonCamera.moveUp(0.006f);
+                firstPersonCamera.moveUp(0.0056f);
                 thirdPersonCamera.setPosition(x2, y2, z2);
                 thirdPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
                 thirdPersonCamera.moveBackwards(0.02f);
-                thirdPersonCamera.moveUp(0.006f);
+                thirdPersonCamera.moveUp(0.0056f);
             }
         }
     }
