@@ -8,6 +8,7 @@ import org.lwjgl.opengl.GL30;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.glClearColor;
@@ -69,7 +70,7 @@ public class Main {
                 0.125f,
                 0.125f,
                 0.125f,
-                "/models/sirkuitfinalrilcuy2.obj", "C:\\Users\\ADI CHRISTIAN\\OneDrive\\Documents\\Tugas-Tugas Kuliah\\Grafika Komputer\\ProyekUASGrafkom\\src\\main\\resources\\textures\\texture.png"
+                "/models/sirkuitfinalrilcuy2.obj", "C:\\Users\\ASUS ROG\\Projects\\grafkom\\proyek-uas-grafkom\\src\\main\\resources\\textures\\texture.png"
 
         ));
         objects.get(0).scaleObject(0.25f, 0.25f, 0.25f);
@@ -92,7 +93,7 @@ public class Main {
                 0.125f,
                 0.125f,
                 0.125f,
-                "/models/supra2.obj", "C:\\Users\\ADI CHRISTIAN\\OneDrive\\Documents\\Tugas-Tugas Kuliah\\Grafika Komputer\\ProyekUASGrafkom\\src\\main\\resources\\textures\\texture2.png"
+                "/models/supra2.obj", "C:\\Users\\ASUS ROG\\Projects\\grafkom\\proyek-uas-grafkom\\src\\main\\resources\\textures\\texture2.png"
         ));
         objects.get(1).scaleObject(0.0005f, 0.0005f, 0.0005f);
         objects.get(1).rotateObject((float) (Math.toRadians(90f)), 0f, 1f, 0f);
@@ -116,7 +117,7 @@ public class Main {
                 0.125f,
                 0.125f,
                 0.125f,
-                "/models/supra3.obj","C:\\Users\\ADI CHRISTIAN\\OneDrive\\Documents\\Tugas-Tugas Kuliah\\Grafika Komputer\\ProyekUASGrafkom\\src\\main\\resources\\textures\\texture3.png"
+                "/models/supra3.obj","C:\\Users\\ASUS ROG\\Projects\\grafkom\\proyek-uas-grafkom\\src\\main\\resources\\textures\\texture3.png"
         ));
         objects.get(2).scaleObject(0.0005f, 0.0005f, 0.0005f);
         objects.get(2).rotateObject((float) (Math.toRadians(90f)), 0f, 1f, 0f);
@@ -139,7 +140,7 @@ public class Main {
                 0.125f,
                 0.125f,
                 0.125f,
-                "/models/tiangonly.obj","C:\\Users\\ADI CHRISTIAN\\OneDrive\\Documents\\Tugas-Tugas Kuliah\\Grafika Komputer\\ProyekUASGrafkom\\src\\main\\resources\\textures\\texture3.png"
+                "/models/tiangonly.obj","C:\\Users\\ASUS ROG\\Projects\\grafkom\\proyek-uas-grafkom\\src\\main\\resources\\textures\\texture3.png"
         ));
         lampu.get(0).scaleObject(0.25f,0.25f,0.25f);
         lampu.get(0).translateObject(0.125f,0.0f,-0.01f);

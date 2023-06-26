@@ -103,7 +103,7 @@ public class Sphere extends Object {
         // directional light
         uniformsMap.setUniform("dirLight.direction", new Vector3f(-0.2f,-1.0f,-0.3f));
         uniformsMap.setUniform("dirLight.ambient", new Vector3f(0.05f,0.05f,0.05f));
-        uniformsMap.setUniform("dirLight.diffuse", new Vector3f(0.4f,0.4f,0.4f));
+        uniformsMap.setUniform("dirLight.diffuse", new Vector3f(0.1f,0.1f,0.1f));
         uniformsMap.setUniform("dirLight.specular", new Vector3f(0.5f,0.5f,0.5f));
 
         Vector3f[] _pointLightPositions = {
@@ -146,6 +146,9 @@ public class Sphere extends Object {
 //        uniformsMap.setUniform("spotLight.outerCutOff", (float) Math.cos(Math.toRadians(12.5f)));
 //        uniformsMap.setUniform("viewPos", camera.getPosition());
 //        uniformsMap.setUniform("textureSampler", 0);
+
+        //lampu
+        uniformsMap.setUniform("Lampu", new Vector3f(1.0f,1.0f,1.0f));
 
         // bind texture
         glEnableVertexAttribArray(2);

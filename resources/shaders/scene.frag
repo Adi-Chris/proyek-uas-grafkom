@@ -49,6 +49,8 @@ out vec4 frag_color;
 //uniform vec3 lightPos;
 uniform vec3 viewPos;
 
+uniform vec3 Lampu;
+
 in vec3 Normal;
 in vec3 FragPos;
 in vec2 fragTextureCoordinate;
@@ -85,8 +87,8 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
     vec3 diffuse = light.diffuse * diff;
     vec3 specular = light.specular * spec;
     ambient *= attenuation;
-    diffuse *= attenuation;
-    specular *= attenuation;
+    diffuse *= attenuation * Lampu;
+    specular *= attenuation * Lampu;
     return (ambient + diffuse + specular);
 }
 
@@ -118,6 +120,10 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
 //    specular *= attenuation * intensity;
 //    return (ambient + diffuse + specular);
 //}
+
+// Colour
+
+
 
 void main() {
     // properties
