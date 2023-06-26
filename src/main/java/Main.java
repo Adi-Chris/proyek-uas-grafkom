@@ -242,7 +242,7 @@ public class Main {
             float z2 = objects.get(2).updateCenterPoint().z;
             thirdPersonCamera.setPosition(x2, y2, z2);
             thirdPersonCamera.moveBackwards(0.02f);
-            thirdPersonCamera.moveUp(0.0056f);
+            thirdPersonCamera.moveUp(0.006f);
         }
         if (window.isKeyPressed(GLFW_KEY_3) && pilihanKamera != 3) {
             pilihanKamera = 3;
@@ -250,7 +250,7 @@ public class Main {
             float y2 = objects.get(2).updateCenterPoint().y;
             float z2 = objects.get(2).updateCenterPoint().z;
             firstPersonCamera.setPosition(x2, y2, z2);
-            firstPersonCamera.moveUp(0.0056f);
+            firstPersonCamera.moveUp(0.006f);
         }
 
         if (pilihanKamera == 1) {
@@ -331,10 +331,10 @@ public class Main {
                 thirdPersonCamera.setPosition(x2, y2, z2);
                 thirdPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
                 thirdPersonCamera.moveBackwards(0.02f);
-                thirdPersonCamera.moveUp(0.0056f);
+                thirdPersonCamera.moveUp(0.006f);
                 firstPersonCamera.setPosition(x2, y2, z2);
                 firstPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
-                firstPersonCamera.moveUp(0.0056f);
+                firstPersonCamera.moveUp(0.006f);
             }
             if (window.isKeyPressed(GLFW_KEY_RIGHT)) {
                 float x = objects.get(1).updateCenterPoint().x;
@@ -362,10 +362,10 @@ public class Main {
                 thirdPersonCamera.setPosition(x2, y2, z2);
                 thirdPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
                 thirdPersonCamera.moveBackwards(0.02f);
-                thirdPersonCamera.moveUp(0.0056f);
+                thirdPersonCamera.moveUp(0.006f);
                 firstPersonCamera.setPosition(x2, y2, z2);
                 firstPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
-                firstPersonCamera.moveUp(0.0056f);
+                firstPersonCamera.moveUp(0.006f);
             }
 //            if (window.getMouseInput().isLeftButtonPressed()) {
 //                Vector2f displayVector = window.getMouseInput().getDisplVec();
@@ -391,7 +391,7 @@ public class Main {
                 thirdPersonCamera.setPosition(x2, y2, z2);
                 thirdPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
                 thirdPersonCamera.moveBackwards(0.02f);
-                thirdPersonCamera.moveUp(0.0056f);
+                thirdPersonCamera.moveUp(0.006f);
             }
             if (window.isKeyPressed(GLFW_KEY_A)) {
                 float x = objects.get(1).updateCenterPoint().x;
@@ -418,10 +418,10 @@ public class Main {
                 thirdPersonCamera.setPosition(x2, y2, z2);
                 thirdPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
                 thirdPersonCamera.moveBackwards(0.02f);
-                thirdPersonCamera.moveUp(0.0056f);
+                thirdPersonCamera.moveUp(0.006f);
                 firstPersonCamera.setPosition(x2, y2, z2);
                 firstPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
-                firstPersonCamera.moveUp(0.0056f);
+                firstPersonCamera.moveUp(0.006f);
             }
             if (window.isKeyPressed(GLFW_KEY_S)) {
                 float x2 = objects.get(2).updateCenterPoint().x;
@@ -436,7 +436,7 @@ public class Main {
                 thirdPersonCamera.setPosition(x2, y2, z2);
                 thirdPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
                 thirdPersonCamera.moveBackwards(0.02f);
-                thirdPersonCamera.moveUp(0.0056f);
+                thirdPersonCamera.moveUp(0.006f);
             }
             if (window.isKeyPressed(GLFW_KEY_D)) {
                 float x = objects.get(1).updateCenterPoint().x;
@@ -464,10 +464,10 @@ public class Main {
                 thirdPersonCamera.setPosition(x2, y2, z2);
                 thirdPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
                 thirdPersonCamera.moveBackwards(0.02f);
-                thirdPersonCamera.moveUp(0.0056f);
+                thirdPersonCamera.moveUp(0.006f);
                 firstPersonCamera.setPosition(x2, y2, z2);
                 firstPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
-                firstPersonCamera.moveUp(0.0056f);
+                firstPersonCamera.moveUp(0.006f);
             }
             if (window.isKeyPressed(GLFW_KEY_UP)) {
                 float x2 = objects.get(2).updateCenterPoint().x;
@@ -478,7 +478,7 @@ public class Main {
                 thirdPersonCamera.setPosition(x2, y2, z2);
                 thirdPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
                 thirdPersonCamera.moveBackwards(0.02f);
-                thirdPersonCamera.moveUp(0.0056f);
+                thirdPersonCamera.moveUp(0.006f);
             }
             if (window.isKeyPressed(GLFW_KEY_DOWN)) {
                 float x2 = objects.get(2).updateCenterPoint().x;
@@ -489,7 +489,7 @@ public class Main {
                 thirdPersonCamera.setPosition(x2, y2, z2);
                 thirdPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
                 thirdPersonCamera.moveBackwards(0.02f);
-                thirdPersonCamera.moveUp(0.0056f);
+                thirdPersonCamera.moveUp(0.006f);
             }
         }
 
@@ -506,7 +506,7 @@ public class Main {
                     objects.get(2).moveForwardCheckCollision(1, aabbList);
                 firstPersonCamera.setPosition(x2, y2, z2);
                 firstPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
-                firstPersonCamera.moveUp(0.0056f);
+                firstPersonCamera.moveUp(0.006f);
             }
             if (window.isKeyPressed(GLFW_KEY_A)) {
                 float x = objects.get(1).updateCenterPoint().x;
@@ -532,11 +532,11 @@ public class Main {
                     }
                 firstPersonCamera.setPosition(x2, y2, z2);
                 firstPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
-                firstPersonCamera.moveUp(0.0056f);
+                firstPersonCamera.moveUp(0.006f);
                 thirdPersonCamera.setPosition(x2, y2, z2);
                 thirdPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
                 thirdPersonCamera.moveBackwards(0.02f);
-                thirdPersonCamera.moveUp(0.0056f);
+                thirdPersonCamera.moveUp(0.006f);
             }
             if (window.isKeyPressed(GLFW_KEY_S)) {
                 float x2 = objects.get(2).updateCenterPoint().x;
@@ -550,7 +550,7 @@ public class Main {
                     objects.get(2).moveBackwardCheckCollision(1, aabbList);
                 firstPersonCamera.setPosition(x2, y2, z2);
                 firstPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
-                firstPersonCamera.moveUp(0.0056f);
+                firstPersonCamera.moveUp(0.006f);
             }
             if (window.isKeyPressed(GLFW_KEY_D)) {
                 float x = objects.get(1).updateCenterPoint().x;
@@ -576,11 +576,11 @@ public class Main {
                     }
                 firstPersonCamera.setPosition(x2, y2, z2);
                 firstPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
-                firstPersonCamera.moveUp(0.0056f);
+                firstPersonCamera.moveUp(0.006f);
                 thirdPersonCamera.setPosition(x2, y2, z2);
                 thirdPersonCamera.setRotation(0f, (float) ((Math.toRadians(1.5f) * count) + Math.toRadians(90)));
                 thirdPersonCamera.moveBackwards(0.02f);
-                thirdPersonCamera.moveUp(0.0056f);
+                thirdPersonCamera.moveUp(0.006f);
             }
         }
     }
